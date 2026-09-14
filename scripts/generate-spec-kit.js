@@ -59,14 +59,32 @@ const OUTPUT_MAP = [
   { key: "test_plan", file: "test-plan.md" }
 ];
 
-function writeSpecArtifacts(outputDir, spec) {
+/** Build the YAML frontmatter block required by commands/generate_spec_kit.md (Paso 4). */
+function buildArtifactFrontmatter(meta) {
+  const lines = [
+    "---",
+    `generated_by_model: '${meta.model}'`,
+    `generated_at: '${meta.generatedAt}'`,
+    `agent_roles: '${meta.agentRoles}'`,
+    `vision_command: 'generate_spec_kit'`,
+    `source_brief: '${meta.sourceBrief}'`
+  ];
+  if (meta.sourceProductPrd) {
+    lines.push(`source_product_prd: '${meta.sourceProductPrd}'`);
+  }
+  lines.push("---", "");
+  return lines.join("\n");
+}
+
+function writeSpecArtifacts(outputDir, spec, meta) {
   const artifactFiles = [];
+  const frontmatter = buildArtifactFrontmatter(meta);
   OUTPUT_MAP.forEach(({ key, file }) => {
     const value = spec?.[key];
     if (typeof value !== "string" || value.trim().length === 0) {
       throw new Error(`Spec payload missing key: ${key}`);
     }
-    fs.writeFileSync(path.join(outputDir, file), `${value.trim()}\n`, "utf8");
+    fs.writeFileSync(path.join(outputDir, file), `${frontmatter}${value.trim()}\n`, "utf8");
     artifactFiles.push(file);
   });
   return artifactFiles;
@@ -591,7 +609,14 @@ async function runMatrixMode(root, args, context) {
     workspaceId: context.workspaceId
   });
 
-  const artifactFiles = writeSpecArtifacts(outputDir, result);
+  const meta = {
+    model: "matrix-remote",
+    generatedAt: new Date().toISOString(),
+    agentRoles: "pending-ide-agent-review",
+    sourceBrief: path.relative(root, briefPath).replace(/\\/g, "/"),
+    sourceProductPrd: productPrd.trim() ? "resolved (see command Paso 2 order)" : ""
+  };
+  const artifactFiles = writeSpecArtifacts(outputDir, result, meta);
   markSpecGenerated(root, "matrix", artifactFiles, `Matrix spec generated at ${path.relative(root, outputDir)}`);
   await reportGeneration(root, context, "matrix", outputDir, artifactFiles);
 
@@ -616,6 +641,7 @@ async function runLocalMode(root, args, context, reason) {
   const clarificationData = readClarifications(root, "spec_kit");
   const specKitClarifications = clarificationData && clarificationData.answers ? clarificationData.answers : {};
   let specPayload;
+  let generationModel = process.env.LOCAL_IDE_AI_MODEL_NAME || "local-ide-ai-command";
   try {
     specPayload = generateLocalSpecWithAi(
       root,
@@ -631,9 +657,17 @@ async function runLocalMode(root, args, context, reason) {
       "Fallback embeds approved brief + product PRD into all 8 artifacts (not the generic VISION template). Configure LOCAL_IDE_AI_COMMAND for structured engineering output."
     );
     specPayload = buildFallbackSpec(context.projectName, brief, productPrd);
+    generationModel = "vision-fallback-deterministic (pending IDE agent enrichment)";
   }
 
-  const artifactFiles = writeSpecArtifacts(outputDir, specPayload);
+  const meta = {
+    model: generationModel,
+    generatedAt: new Date().toISOString(),
+    agentRoles: "pending-ide-agent-review",
+    sourceBrief: path.relative(root, briefPath).replace(/\\/g, "/"),
+    sourceProductPrd: productPrd.trim() ? "resolved (see command Paso 2 order)" : ""
+  };
+  const artifactFiles = writeSpecArtifacts(outputDir, specPayload, meta);
   markSpecGenerated(root, "local", artifactFiles, `Local spec generated at ${path.relative(root, outputDir)}`);
   await reportGeneration(root, context, "local", outputDir, artifactFiles);
 
