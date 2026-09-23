@@ -1,0 +1,18 @@
+{
+  "stage": "brief",
+  "answers": {
+    "brief_tone": "Executive and neutral; shareable with Jane's team; English; synthesise, no internal speculation about individuals",
+    "brief_audience": "Jane Kerrigan's whole Future of Work team (e.g. Wouter Kop, Annalisa Bianchi, Haaron Gonzalez) as input for the 'How should we organise to make this work?' discussion",
+    "brief_scope": "Discussion pack + clickable prototype: operating-model options synthesis (ownership, intake, prioritisation, delivery model, value measurement, knowledge management) plus a clickable Microsoft 365 prototype with illustrative data. No production build.",
+    "brief_priority": "Medium-high: support the team's upcoming operating-model discussion",
+    "tech_stack": "Microsoft 365 low-code (SharePoint Lists, Microsoft Forms, Power Automate, Power BI, Teams)",
+    "canonical_methodology": "4-step engagement lifecycle: Discover -> Design -> Enable -> Measure & Improve (deck slide 7)",
+    "ux_theming": "Definir mas adelante / minimo viable sin preferencias (use M365/Fluent defaults)",
+    "ux_responsive": "Responsive (escritorio y tablet) - Teams desktop primary",
+    "ux_visual_style": "Alineado a un sistema conocido (Material, Fluent, etc.) - Microsoft Fluent",
+    "ux_density": "Flujo simple: pocas opciones visibles, asistentes",
+    "ux_accessibility": "Basico: legibilidad y contraste razonable (M365 defaults)"
+  },
+  "completedAt": "2026-09-23T15:24:21.219Z",
+  "questions": []
+}
