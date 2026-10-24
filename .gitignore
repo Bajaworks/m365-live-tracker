@@ -20,3 +20,7 @@ agency-agents/upstream/
 .opencode/
 .windsurf/
 .github/copilot-instructions.md
+
+# Project-specific reference docs (keep only the README)
+refdocs/*
+!refdocs/README.md
