@@ -7,7 +7,7 @@ El caso de uso: una **encuesta de satisfacción de soporte** que Copilot abre cu
 | | |
 |---|---|
 | **Estado** | Sprints 1–3 cerrados · Sprint 4 (*Listo para el escenario*) en curso |
-| **Código** | [apps/satisfaction-survey/](apps/satisfaction-survey/) — SPFx 1.24.0-rc.0, React 18, Fluent UI v9 |
+| **Código** | [apps/satisfaction-survey/](apps/satisfaction-survey/) — SPFx 1.24.0 (GA), React 18, Fluent UI v9 |
 | **Evento** | **Microsoft 365 Live 2026** — sesión confirmada; horario por publicar (semana del 26 de octubre) |
 | **Audiencia de la sesión** | Profesionales de TI y desarrolladores de SharePoint · español · 1 hora |
 | **Formato de la demo** | Copilot Workbench en vivo + diagnóstico en Copilot real con `-developer on` |

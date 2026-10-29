@@ -13,7 +13,7 @@ sprint_number: 4
 ## 1. Qué es el proyecto
 
 - Demo para la sesión del autor en **Microsoft 365 Live 2026**: **virtual por Teams**, 1 hora, en español, para profesionales de TI y desarrolladores de SharePoint. La sesión está confirmada en Sessionize (2026-10-23) y el horario se publica la semana del 26 de octubre.
-- Tema: **Copilot UX components** (antes *SharePoint Copilot Apps*), SPFx **1.24.0-rc.0**, React 18 y Fluent UI v9.
+- Tema: **Copilot UX components** (antes *SharePoint Copilot Apps*), SPFx **1.24.0** (GA), React 18 y Fluent UI v9.
 - Caso: agente "Encuestas de Satisfacción" con **2 componentes** en `apps/satisfaction-survey/`:
   - `OpenSatisfactionSurvey(ticketNumber?, technician?)`: formulario de satisfacción. Componente `satisfactionSurveyForm`, ID `783decbc-…`, solo inline.
   - `ShowTechnicianScorecard(technician, period?)`: tablero con círculos por dimensión, tendencia y distribución. Componente `technicianScorecard`, ID `6954f70b-…`, inline y pantalla completa.

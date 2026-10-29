@@ -40,7 +40,7 @@ Fuentes:
 Tiempo: 02:00–05:00
 
 QUÉ DECIR
-Hay responsabilidades distintas. El agente interpreta la petición del usuario. La herramienta conecta esa intención con el componente. El componente recibe propiedades y ejecuta la experiencia que programamos. Aquí usaremos React 18 y Fluent UI v9, con SPFx 1.24.0-rc.0, la versión fijada en este repositorio. El despliegue aprovecha el App Catalog de SharePoint.
+Hay responsabilidades distintas. El agente interpreta la petición del usuario. La herramienta conecta esa intención con el componente. El componente recibe propiedades y ejecuta la experiencia que programamos. Aquí usaremos React 18 y Fluent UI v9, con SPFx 1.24.0 GA, la versión fijada en este repositorio. El despliegue aprovecha el App Catalog de SharePoint.
 MENSAJE CLAVE
 El modelo decide la llamada, mientras el código implementa la interacción y las validaciones.
 TRANSICIÓN

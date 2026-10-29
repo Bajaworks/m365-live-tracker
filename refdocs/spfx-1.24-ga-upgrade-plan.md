@@ -147,11 +147,11 @@ Este comando ejecuta:
 
 ## 5. Criterios de Aceptación (Definition of Done)
 
-- [ ] Todas las referencias a `1.24.0-rc.0` eliminadas de `package.json` y `package-solution.json`.
-- [ ] `npm install` completa sin errores de árbol de dependencias.
-- [ ] `npx heft test --clean` pasa al 100% (73/73 tests).
-- [ ] `npm run build` genera `satisfaction-survey.sppkg` sin advertencias.
+- [x] Todas las referencias a `1.24.0-rc.0` eliminadas de `package.json` y `package-solution.json`.
+- [x] `npm install` completa sin errores de árbol de dependencias.
+- [x] `npx heft test --clean` pasa al 100% (73/73 tests).
+- [ ] `npm run build` genera `satisfaction-survey.sppkg` sin advertencias (a ejecutar por el autor según Regla #3).
 - [ ] `npm run check-branding` pasa satisfactoriamente (respetando la decisión actual sobre sample psd1).
 - [ ] Los 2 componentes se cargan e interactúan correctamente en Copilot Workbench.
-- [ ] Documentación de Sprint 4 (`HANDOFF.md`, `planning/sprints/sprint-04/tasks.md`) actualizada reflejando SPFx 1.24 GA.
+- [x] Documentación (`HANDOFF.md`, `README.md`) actualizada reflejando SPFx 1.24 GA.
 
