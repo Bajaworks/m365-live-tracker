@@ -1,0 +1,19 @@
+{
+  "generated_by_model": "claude-opus-5-5",
+  "generated_at": "2026-10-24T13:30:00Z",
+  "agent_roles": "IDE Agent + product-sprint-prioritizer + project-management-project-shepherd",
+  "vision_command": "clarify_sprints",
+  "source_spec_kit": "spec-kit/input/",
+  "stage": "sprints",
+  "answers": {
+    "sprint_duration": "Sprints cortos de 2–4 días de trabajo (fecha del evento aún sin definir; el último despliegue a T−48 h).",
+    "sprint_count": "4 sprints: S1 Datos y fundaciones, S2 Encuesta en Copilot, S3 Tablero, S4 Listo para el escenario.",
+    "team_roles": "Autor (presentador, scaffolding SPFx, ejecución de scripts PnP en bajaworks) + agente IDE (implementación full-stack SPFx/PowerShell, pruebas, docs).",
+    "success_criteria": "Funcionalidad demostrable de punta a punta por sprint + pruebas unitarias en verde + check-branding en verde.",
+    "site_alias": "/sites/encuestas (decisión del autor 2026-10-24).",
+    "author_tasks": "El autor agrega el componente technician-scorecard con yo (S3) y proporciona 3–6 correos de usuarios de bajaworks como técnicos de ejemplo (S1).",
+    "decisions_confirmed": "Ticket # = Title renombrado; comentario obligatorio con resultado≠Sí o dimensión≤2; sin permisos Graph; Contribute para todos con WriteSecurity=2; agente 'Encuestas de Satisfacción'; 6 perfiles de datos de ejemplo."
+  },
+  "completedAt": "2026-10-24T13:30:00Z",
+  "questions": []
+}

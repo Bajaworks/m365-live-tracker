@@ -1,165 +1,143 @@
-# Future of Work Consultancy — Operating Model Discussion Pack & Prototype
+# Encuesta de Satisfacción en Copilot — demo de Copilot UX components
 
-Operating model discussion pack and clickable Microsoft 365 prototype for the Future of Work Consultancy: intake, prioritisation, engagement scorecards, a Simplification Index and value reporting.
+Planeación y construcción de una **demo en vivo de 60 minutos** sobre **Copilot UX components** (antes *SharePoint Copilot Apps*), la capacidad de SharePoint Framework 1.24 que dibuja interfaces interactivas dentro de Microsoft 365 Copilot.
 
-**Status:** Brief generated · next step `generate_spec_kit`
-**Stack:** Microsoft 365, low-code (SharePoint Lists, Microsoft Forms, Power Automate, Power BI, Teams)
-**Delivery framework:** VISION (brief → spec kit → sprints → execution)
-
----
-
-## The initiative
-
-The **Future of Work Consultancy** helps employees, teams and business units improve the way they work. It combines Microsoft 365 expertise, practical coaching and consultancy. Its promise: *from using the tools → to improving the work.*
+El caso de uso: una **encuesta de satisfacción de soporte** que Copilot abre cuando el usuario quiere calificar una atención, y un **tablero** con el desempeño de cada técnico en cuatro dimensiones. Todo se planeó y construyó con el **framework VISION** (brief → spec kit → sprints → ejecución).
 
 | | |
 |---|---|
-| **Domains** | Productivity · Collaboration & Communication · Business Process Improvement |
-| **Service routes** | Training (webinars, tailored team sessions) · Consultancy projects · 1-to-1 coaching |
-| **Engagement lifecycle** | Discover → Design → Enable → Measure & Improve |
-| **Value to the business** | Performance · Efficiency · Employee experience |
-| **Evidence levels** | Reach → Capability → Behaviour → Outcome |
-
-AI and automation are built into solutions wherever they improve the work. They are not separate services.
-
-### The missing part
-
-The service offering and the measurement approach are well defined. The operating model is not yet. The team still has to decide:
-
-- **Ownership & organisation.** Who is accountable for which services?
-- **Access & intake.** How do people engage the consultancy?
-- **Prioritisation.** How is demand ranked, and who decides?
-- **Delivery model.** What is central, embedded, or delivered through other teams?
-- **Learning & value.** How do we judge value and adapt the model?
-- **Knowledge management.** How do we capture and reuse what we learn?
-
-There is also a benefit that shows up in almost every engagement but is not measured yet: **business processes become simpler.**
+| **Estado** | Sprints 1–3 cerrados · Sprint 4 (*Listo para el escenario*) en curso |
+| **Código** | [apps/satisfaction-survey/](apps/satisfaction-survey/) — SPFx 1.24.0-rc.0, React 18, Fluent UI v9 |
+| **Evento** | **Microsoft 365 Live 2026** — sesión confirmada; horario por publicar (semana del 26 de octubre) |
+| **Audiencia de la sesión** | Profesionales de TI y desarrolladores de SharePoint · español · 1 hora |
+| **Formato de la demo** | Copilot Workbench en vivo + diagnóstico en Copilot real con `-developer on` |
+| **Datos** | Empresa ficticia (Contoso) y respuestas de ejemplo generadas |
 
 ---
 
-## What this project delivers
+## Qué se construyó
 
-### 1. Operating Model Discussion Pack
+Un **agente declarativo**, "Encuestas de Satisfacción", con **dos Copilot UX components** en un solo proyecto SPFx:
 
-- One options card per open question: options, trade-offs, dependencies, a suggested starting point and a decision owner.
-- A discussion guide built around the question *"What would make this workable in practice — and what could get in the way?"*
-- A decision log template and a one-page glossary.
+| Componente | Herramienta | Qué hace |
+|---|---|---|
+| Encuesta | `OpenSatisfactionSurvey(ticketNumber?, technician?)` | Formulario dentro del chat, con ticket y técnico precargados desde la frase del usuario. Guarda en SharePoint. |
+| Tablero | `ShowTechnicianScorecard(technician, period?)` | Un círculo por dimensión, % resuelto y % que recomienda, distribución 1–5, tendencia mensual y comentarios sin autor. Vista inline y pantalla completa. |
 
-### 2. Clickable Microsoft 365 prototype (sample data)
+**El formulario original se rediseñó** a partir del análisis del ejemplo en `refdocs/`:
+- **Identificación:** ahora pide el técnico, que el original no identificaba.
+- **Respuestas explícitas:** "Resultado" usa Sí / Parcialmente / No y "¿Recomendarías?" usa Sí / No / No estoy seguro. El original usaba casillas, y una casilla vacía no distingue "No" de "no contestó".
+- **Escalas sin sesgo:** van del 1 al 5 sin valor preseleccionado (el original traía el 3 marcado) y con una etiqueta en cada punto.
+- **Comentario condicional:** es obligatorio cuando el problema no se resolvió del todo o hay una calificación ≤ 2.
+- **Sin duplicados:** una sola respuesta por ticket y por usuario.
 
-It walks through one complete engagement end to end:
+**Dimensiones:** Comprensión · Rapidez · Habilidad · Comunicación.
+**Visualización:** cada círculo se llena **por área** según el promedio. Con 1 se ve solo el contorno y con 5 queda lleno, sin comparación con otros técnicos.
 
-```
-Request form → Triage → Prioritisation board → Engagement (4 steps)
-   → Scorecard → Evidence (4 levels) → Simplification Index
-   → Value dashboard → Work story
-```
+**Lado de SharePoint:** un sitio de comunicación `/sites/encuestas` y la lista **Encuestas**:
+- Columnas con el prefijo `m365live_`, como `m365live_Communication`.
+- Permisos: todos leen todo y cada quien edita solo lo suyo.
+- Se aprovisiona con **PnP.PowerShell 1.5.0** y `-UseWebLogin`, más datos de ejemplo con fechas repartidas en 6 meses.
 
-| Component | Built with |
-|-----------|-----------|
-| Service catalogue, requests, engagements, scorecards, evidence, process profiles, stories, assets | SharePoint Lists |
-| Intake and pulse surveys | Microsoft Forms |
-| Notifications and status updates (optional) | Power Automate |
-| Monthly / quarterly / annual value views | Power BI (SharePoint views as fallback) |
-| Team access | Teams tab |
-
-### Simplification Index (proposed)
-
-A comparable measure of how much simpler a process became:
-
-- **Simplification Index** = weighted average % reduction in *manual steps*, *hand-offs*, *cycle time* and *errors/rework*
-- **Time released** = (time before − time after) × annual frequency, confirmed by the benefit owner
-
-Worked example (illustrative): monthly reporting went from 6 h and 9 manual steps to 45 min and 3 steps. The dimensions and weights are open for the team to review.
-
-### Out of scope
-
-Production build, real user data, system integrations, individual performance measurement, and decisions on the team's name or structure. The pack presents options; the team decides.
+Detalles técnicos y cómo probarlo: **[apps/satisfaction-survey/README.md](apps/satisfaction-survey/README.md)**.
 
 ---
 
-## Measurement principles
+## Cómo se llevó el proceso (VISION)
 
-The prototype follows these principles, all taken from the operating model:
+```
+init → generate_brief → generate_spec_kit → generate_sprints
+     → start_sprint 1 → start_sprint 2 → start_sprint 3 → start_sprint 4 (en curso)
+```
 
-- Measure the **change in work**, not just attendance or clicks.
-- Start with a **baseline**. Use **more than one signal**.
-- Be **proportionate**:
-  - Webinars and coaching: light.
-  - Team sessions: standard.
-  - Consultancy projects: detailed.
-- **Separate influence from proof.** Claim contribution, not causation.
-- **Tell the value story.** Each work story answers five questions:
-  1. What was getting in the way?
-  2. What did we do?
-  3. What changed?
-  4. What evidence shows it?
-  5. What will sustain it?
+| Paso | Resultado |
+|---|---|
+| `init` | Proyecto nuevo, sin ingeniería inversa. Se reinició el estado de un proyecto anterior |
+| `generate_brief` | [spec-kit/input/brief.md](spec-kit/input/brief.md): objetivos, alcance, análisis del formulario y decisiones del autor |
+| `generate_spec_kit` | [spec-kit/input/](spec-kit/input/): PRD, especificación técnica, modelo de datos, api-spec, épicas, 22 historias, plan de sprints y plan de pruebas |
+| `generate_sprints` | 4 sprints en [planning/sprints/](planning/sprints/) (40 tareas). Se escribieron a mano porque el generador automático convertía cada criterio de aceptación en una historia |
+| Sprint 1 — Datos y fundaciones | Sitio, lista, permisos y datos de ejemplo en el tenant; capa compartida con pruebas |
+| Sprint 2 — Encuesta en Copilot | Formulario completo, probado en el Workbench con escritura real en la lista; primer despliegue |
+| Sprint 3 — Tablero | Tablero inline y en pantalla completa, con gráficas validadas para daltonismo y tema oscuro |
+| Sprint 4 — Listo para el escenario | Guion de 60 minutos, README en español e inglés, licencia MIT y matriz de intención (en curso) |
+
+**Calidad:** 73 pruebas unitarias, build sin advertencias de lint y un verificador de marcas (`npm run check-branding`) que falla si aparece una marca real o un tenant concreto.
 
 ---
 
-## Progress
+## Hallazgos clave
 
-- [x] `init`: project initialised (no reverse engineering; Spec Kit and Agency Agents updated)
-- [x] `clarify_brief`: scope, stack, methodology and audience agreed
-- [x] `generate_brief`: [spec-kit/input/brief.md](spec-kit/input/brief.md)
-- [ ] `generate_spec_kit`: PRD, technical spec, data model, epics, stories, sprint plan, test plan
-- [ ] `generate_sprints`: sprint plan
-- [ ] `start_sprint --sprint 1`: build the discussion pack and prototype
+Están documentados en [docs/spikes.md](apps/satisfaction-survey/docs/spikes.md) y en los riesgos de [technical-spec.md](spec-kit/input/technical-spec.md).
 
-### Open questions
-
-- When is the team's operating-model discussion? This sets the delivery date.
-- Are Power BI, Power Automate and a SharePoint site available? Who owns the environment?
-- Which dimensions and weights should the Simplification Index use? Should it cover all domains or only Business Process Improvement?
-- Which prioritisation criteria matter most?
-- Should the prototype use fictional or anonymised real sample engagements?
-- Is the "AI front door" idea (the consultancy as the entry point for AI initiatives) in scope now?
-
----
-
-## Repository structure
-
-```
-refdocs/                  Source material (operating model deck, meeting notes)
-spec-kit/input/brief.md   Project brief
-spec-kit/input/           Spec Kit artefacts (generated next)
-planning/                 Workflow state, clarifications, sprints
-commands/                 VISION command definitions (source of truth)
-agency-agents/agents/     Agent role definitions
-scripts/                  VISION Node.js scripts
-docs/                     VISION documentation and training course
-```
+| # | Hallazgo | Qué hicimos |
+|---|---|---|
+| 1 | **Licencia:** en Copilot real los componentes devuelven `403 {"reason":"copilot_license_required"}` con una cuenta *Copilot Chat (Basic)*. Le pasa también al ejemplo *My Day* de Microsoft. El Workbench funciona sin licencia | Demo en el Workbench, y el 403 se muestra en la sesión como lección (riesgo R11) |
+| 2 | **`-developer on`** en Copilot muestra la versión del agente, la herramienta *Matched/Selected*, los argumentos, la URL del servidor MCP y la respuesta | Es la primera herramienta de diagnóstico y un segmento de la demo |
+| 3 | En Copilot no hay página de SharePoint: el "sitio actual" es la **raíz del tenant** | El sitio se resuelve con el origin + `/sites/encuestas`, o con una propiedad del tenant |
+| 4 | Con `toolDiscovery: "dynamic"` la herramienta no le llegaba a Copilot | `toolDiscovery: "static"` en `config/copilot-agent.json` |
+| 5 | Sin herramienta disponible, Copilot **improvisó un formulario propio** que no guardaba nada | Regla en las instrucciones: nunca imitar la encuesta ni el tablero |
+| 6 | No existe un campo de "keywords": Copilot decide con las instrucciones, la descripción de la herramienta y el `.describe()` de cada parámetro | Esos tres textos llevan las frases que disparan cada herramienta |
+| 7 | El componente puede informarle al modelo lo que pasó (`updateModelContextAsync`) | Copilot puede confirmar una encuesta guardada y responder sobre el tablero con cifras reales, nunca con comentarios |
+| 8 | **PnP.PowerShell 1.5.0:** `Set-PnPList -ReadSecurity 1` dejaba "leer solo los propios", y un correo en un campo Persona llegaba vacío | Permisos asignados con CSOM y verificados; el campo Persona se escribe con el Id del usuario como texto |
+| 9 | Dos versiones distintas: *App version* (`package-solution.json`) y la del agente (la sube el build) | `npm run release` sube la versión del paquete y compila |
+| 10 | El empaquetado mete **todos** los zips de `teams/`; uno viejo habría publicado un segundo agente | `teams/*.zip` en `.gitignore`; borrar los zips viejos al renombrar el agente |
 
 ---
 
-## Working with VISION
+## Cómo continuar
 
-This repository uses the **VISION framework**. Type commands in your IDE agent (Claude Code, Cursor, Copilot, …). The agent reads `commands/<name>.md`, runs the scripts and reports the next step.
-
-```
-init → clarify_brief → generate_brief → generate_spec_kit
-     → generate_sprints → start_sprint --sprint N → continue_sprint
+**Ver en qué etapa está VISION:**
+```bash
+npm run status          # o: node scripts/status-report.js
 ```
 
-Setup:
+**Retomar el sprint 4:** escribe `continue_sprint` en el agente del IDE. Pendientes (ver [planning/sprints/sprint-04/tasks.md](planning/sprints/sprint-04/tasks.md)):
+
+| Tarea | Qué falta | Quién |
+|---|---|---|
+| T-001 Matriz de intención | Correr I2–I15 con `-developer on`. Se puede **sin licencia**: la tarjeta muestra herramienta y argumentos aunque la respuesta sea 403 | Autor |
+| T-002 Despliegue final | Con el horario de Microsoft 365 Live 2026 (por publicar) → publicar a T−48 h (`npm run release` → App Catalog → **Add to Teams**) | Autor |
+| T-004 Plan B | 10 capturas y el video, según [docs/screenshots/README.md](apps/satisfaction-survey/docs/screenshots/README.md) | Autor |
+| T-006 Verificación final | `npm run check-branding` en verde (hoy falla por `provisioning/demo.config.sample.psd1`) y probar el README en otro tenant | Autor + agente |
+
+**Antes de publicar en GitHub:**
+1. Decidir qué se publica: todo este repositorio o solo `apps/satisfaction-survey`.
+2. `npm run check-branding` en verde: el archivo de ejemplo no debe tener la URL ni el Id del tenant real.
+3. Agregar las capturas, porque el README de la app usa `docs/screenshots/scorecard-fullscreen.png`.
+4. Hacer el commit. Hasta ahora todos los cambios están sin commit, por decisión del autor.
+
+**Si consigues una licencia de Microsoft 365 Copilot:** asígnala a la cuenta del presentador y a la cuenta sin permisos de administrador. Después repite la matriz de intención y la prueba de permisos (R2), y pasa los bloques 2 y 4 del guion a Copilot real.
+
+**Documentos de la sesión:**
+- [Guion de 60 minutos](apps/satisfaction-survey/docs/demo-script.md)
+- [Despliegue, pruebas y diagnóstico](apps/satisfaction-survey/docs/deployment.md)
+- [Matriz de intención](apps/satisfaction-survey/docs/intent-matrix.md)
+- [Aprovisionamiento](apps/satisfaction-survey/provisioning/README.md)
+
+---
+
+## Estructura del repositorio
+
+```
+apps/satisfaction-survey/  Proyecto SPFx: componentes, agente, scripts de PnP, documentación
+refdocs/                   Material de origen: formulario de ejemplo, narrativa, restricciones (no se versiona)
+spec-kit/input/            Brief, PRD, especificación técnica, modelo de datos, historias, planes
+planning/                  Estado del workflow, clarificaciones y los 4 sprints
+commands/                  Comandos de VISION (fuente de verdad)
+agency-agents/agents/      Definiciones de roles de agentes
+scripts/                   Scripts Node.js de VISION
+docs/                      Documentación y curso de VISION
+```
+
+## Trabajar con VISION
+
+El flujo se gobierna con comandos que se escriben en el agente del IDE (Claude Code, Cursor, Copilot…). El agente lee `commands/<nombre>.md`, ejecuta los scripts y propone el siguiente paso.
 
 ```bash
 npm install
-npm run setup:ide     # generate IDE agent config (local, not committed)
+npm run setup:ide     # configuración del agente del IDE (local, no se versiona)
+npm run status        # ¿en qué etapa está el proyecto?
+npm run status:web    # tablero local en http://127.0.0.1:4173
 ```
 
-Useful commands:
-
-```bash
-npm run status        # where is the project in the workflow?
-npm run status:web    # local dashboard at http://127.0.0.1:4173
-```
-
-If you're unsure what comes next, run `next_step` in your agent.
-
-More information:
-- [AGENTS.md](AGENTS.md): command overview
-- [GUIA_COMPLETA_VISION.md](GUIA_COMPLETA_VISION.md): full guide (Spanish)
-- [docs/vision-training-course.md](docs/vision-training-course.md): training course
-- [commands/agent_declaration.md](commands/agent_declaration.md): agent role declaration rule
+Si no sabes qué sigue, usa `next_step`. Más información: [AGENTS.md](AGENTS.md) · [GUIA_COMPLETA_VISION.md](GUIA_COMPLETA_VISION.md) · [commands/agent_declaration.md](commands/agent_declaration.md).

@@ -1,5 +1,8 @@
 ﻿# AGENTS.md — **PROJECT_NAME**
 
+> **Proyecto actual:** antes de trabajar, lee [HANDOFF.md](HANDOFF.md) (contexto, reglas del autor, estado del sprint 4 y pendientes de la demo de Copilot UX components).
+
+
 > Estos son **comandos de agente**. Se escriben en la ventana de agente del IDE
 > (Cursor, Claude Code, Gemini CLI, GitHub Copilot, Antigravity, etc.), no en la terminal.
 

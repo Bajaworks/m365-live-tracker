@@ -1,189 +1,186 @@
 ---
 generated_by_model: 'claude-opus-5-5'
-generated_at: '2026-09-23T15:31:00Z'
-agent_roles: 'IDE Agent + product-product-manager + engineering-technical-writer'
+generated_at: '2026-10-24T12:45:00Z'
+agent_roles: 'IDE Agent + product-manager + design-ux-researcher + engineering-technical-writer'
 vision_command: 'generate_brief'
 ---
 
-# Brief — Future of Work Consultancy: Operating Model Discussion Pack & Prototype
+# Brief — Encuesta de Satisfacción en Copilot: demo de Copilot UX components
 
 ## Executive Summary
 
-The **Future of Work Consultancy**, led by Jane Kerrigan, helps employees, teams and business units improve how they work. It has three domains: **Productivity**, **Collaboration & Communication** and **Business Process Improvement**. It delivers through three service routes: **Training** (webinars and tailored team sessions), **Consultancy projects** and **1-to-1 coaching**. Microsoft 365 is the core platform, and AI and automation are built into solutions wherever they improve the work, not sold as separate services.
+Este proyecto prepara una **demo en vivo** para una sesión técnica sobre **Copilot UX components**, la capacidad de SharePoint Framework (SPFx 1.24) que permite mostrar interfaces interactivas dentro de Microsoft 365 Copilot. Se anunció en julio de 2026 como *SharePoint Copilot Apps* y Microsoft la renombró el 30 de septiembre de 2026. Sigue en preview y la disponibilidad general (GA) está prevista para octubre de 2026.
 
-The service offering and the measurement approach are well developed. The deck itself names the gap: *"The missing part… How should we organise to make this work?"* The team still has to decide ownership and organisation, how requests come in, how demand is prioritised, the delivery model, how value is measured, and how knowledge is managed. Jane has also highlighted a benefit that shows up in almost every engagement and is not yet measured: **the business process ends up simpler**.
+El ejemplo de la demo es un escenario que cualquier organización reconoce: la **encuesta de satisfacción después de un ticket de soporte**. Cuando el usuario conversa con Copilot y menciona calificar una atención, responder una encuesta o dar su opinión sobre un caso, el agente **abre el formulario de la encuesta dentro de la conversación**. El formulario ya viene con los datos del ticket y del técnico. Del otro lado, un supervisor puede preguntar *"¿cómo va el desempeño de Ana este trimestre?"* y Copilot muestra un **tablero consolidado** con las calificaciones de esa persona en cada dimensión que mide la encuesta.
 
-This project gives the team two things to support that conversation:
-
-1. **An Operating Model Discussion Pack.** A structured set of options, trade-offs and recommended starting points for each open organisational question.
-2. **A clickable Microsoft 365 prototype**, filled with illustrative data, that shows how the model could work day to day: intake → prioritisation → engagement scorecard → evidence and a Simplification Index → value reporting.
-
-The aim is to help the team decide faster and more concretely, by reacting to something they can see and click rather than an abstract structure. It also tests the concepts in the team's own tools before anyone invests in a production build.
+La propuesta de valor para la audiencia tiene tres partes. Primero, ver la tecnología funcionando con un caso real. Segundo, entender qué se puede hacer y qué limitaciones tiene hoy. Tercero, poder **descargar el código** desde un repositorio público de GitHub, desplegarlo en su propio tenant y seguir los pasos de la construcción. Por eso todo el contenido es **genérico**: empresa ficticia (Contoso), datos ficticios y ninguna marca real.
 
 ## Context
 
-**What already exists (Future of Work deck, 18 slides, plus team meeting notes):**
+- **Formulario de origen.** El ejemplo en `refdocs/formexample.png` y `refdocs/narrative.md` es una encuesta de un proveedor real de servicios. Se usa **solo como inspiración**: no se reutiliza la marca, los nombres ni los textos literales.
+- **Narrativa original.** El autor del formulario busca algo *"súper fácil de llenar"* que permita *"cierto nivel de evaluación del operador"*. Esa es la tensión de diseño: mínima fricción para quien responde y datos útiles para evaluar a cada técnico.
+- **Momento de la tecnología.** Copilot UX components cambió de nombre tres veces en tres meses. La GA está prevista para octubre de 2026, pero el licenciamiento de la GA no está confirmado. La sesión debe usar el nombre actual, mencionar los nombres anteriores (la comunidad todavía los usa) y dejar claro qué es preview.
+- **Cómo funciona (según la documentación de Microsoft, 2026-09-23):**
+  - Una solución SPFx (`.sppkg`) contiene uno o más componentes que heredan de `BaseCopilotComponent`, más la definición de un **agente declarativo** (`declarativeAgent.json`, `instruction.txt`, `ai-plugin.json`, `manifest.json`).
+  - Cada componente expone **tools** con un `propertiesSchema`. Copilot detecta la intención del usuario, invoca la tool y le pasa parámetros que definen cómo se ve el componente al cargar.
+  - Hay dos modos de pantalla: `inline` (dentro del chat) y `fullscreen` (ocupa todo el lienzo).
+  - Se despliega en el App Catalog de SharePoint y se sincroniza al catálogo de agentes con **Add to Teams**. Para probar localmente se usa el **Copilot Workbench** (`/_layouts/15/copilotworkbench.aspx`).
+  - El inicio de sesión es automático (SSO) y el componente trabaja con los permisos del usuario que lo usa.
 
-- **Positioning:** "From using the tools → to improving the work." Value to the business in three areas: **performance, efficiency, employee experience**. Expected results: more productive work, stronger teamwork, simpler processes, sustainable capability.
-- **Canonical engagement lifecycle (adopted for this project):** **Discover → Design → Enable → Measure & Improve**. Each step has a defined output:
-  - Discover: shared challenge and scope.
-  - Design: future way of working and action plan.
-  - Enable: a confident team ready to sustain change.
-  - Measure & Improve: demonstrated value and next steps.
+### Análisis del formulario actual
 
-  Other variants appear in the materials: Understand → Design → Enable → Apply → Improve, and Discover → Design → Enable → Measure → Improve. They are treated as descriptions of the same approach, and the pack will suggest one wording to use everywhere.
-- **Measurement principles:** measure the change in work, not only attendance or clicks. Start with a baseline. Use more than one signal. Be proportionate. Separate influence from proof. Measure adoption in context. Tell the value story.
-- **Value framework, four levels of evidence:** Reach (who did we help?) → Capability (what improved in people's ability?) → Behaviour (what changed in the work?) → Outcome (what value did the change create?).
-- **Proportionate measurement by route:**
-  - Webinars: light.
-  - Tailored team sessions: standard.
-  - Consultancy projects: detailed (baseline, milestones, benefits review, benefit owner, case study).
-  - 1-to-1 coaching: light.
-- **Engagement scorecard (one page):** business challenge, baseline, target behaviour, 3–5 measures, benefit owner.
-- **Reporting:**
-  - Monthly operating view.
-  - Quarterly value view.
-  - Annual portfolio view.
-  - Work stories, each answering five questions and ending with an honest contribution statement.
-
-**Other context from the team discussion:**
-
-- **Name.** Jane prefers "Future of Work" to "Digital Productivity" because it gives a sense of direction and purpose. The team has suggested a few options: an official team name, a slogan or tagline, or a strong adoption and marketing hook for end users. This project uses "Future of Work" as a working label and does not settle the question.
-- **Possible AI front door.** The team could become the entry point for other AI initiatives in the company. The pack treats this as an option to evaluate.
+| # | Elemento actual | Problema | Propuesta |
+|---|---|---|---|
+| A | Campo "relacionado con" (texto libre, gris) | Quien responde tiene que escribir o adivinar el contexto. **No identifica al técnico**, así que no se puede armar una vista por persona. | Bloque de contexto al inicio con **Ticket #** y **técnico** (selector de personas, con foto). Copilot los precarga cuando el usuario los mencionó en la conversación. Si no, se capturan en el mismo formulario. |
+| B | "¿Se resolvió?" con casilla de verificación | Una casilla sin marcar puede significar "No" o "No contestó". | Elección explícita: **Sí / Parcialmente / No**. |
+| C | Comentarios antes de las calificaciones | Se piden comentarios antes de que la persona evalúe nada. El texto es genérico. | Comentario **al final y condicional**. Si la respuesta fue No o Parcialmente, o alguna calificación es ≤ 2, aparece una pregunta específica ("¿Qué pudimos hacer mejor?"). Si no, es opcional. |
+| D | Escala 1–5 con **3 preseleccionado** | El valor por defecto sesga los resultados y no deja distinguir "respondió 3" de "no tocó la pregunta". Solo los extremos tienen etiqueta. | Sin valor preseleccionado, **cada punto con su etiqueta** (Muy malo · Malo · Regular · Bueno · Excelente), botones grandes y uso con teclado. |
+| E | Las dimensiones no coinciden entre la narrativa y la imagen ("ability to address" vs "technical ability") | Ambigüedad en lo que se mide. | Cuatro dimensiones canónicas (nombres definidos por el autor): **Comprensión · Rapidez · Habilidad · Comunicación**. En el formulario cada una lleva una pregunta corta que la explica: "¿Qué tan bien entendió tu problema?", "¿Qué tan rápido respondió?", "¿Qué tanta habilidad técnica mostró para resolverlo?", "¿Qué tan clara fue la comunicación?". En el tablero se muestra solo la etiqueta de una palabra. |
+| F | "¿Nos recomendaría?" con casilla | Tiene la misma ambigüedad que B. | Elección explícita **Sí / No / No estoy seguro**. Usar NPS 0–10 queda como pregunta abierta. |
+| G | Numeración 1 → 2–6, tamaños de título inconsistentes, faltas de ortografía | Se ve poco profesional. | Un solo flujo visual: 3 bloques (Resultado → Calificación → Comentario) con indicador de progreso. |
+| H | No evita respuestas duplicadas | Se puede responder el mismo ticket varias veces. | **Una respuesta por ticket y por solicitante.** Si ya existe, se muestra la que envió. |
 
 ## Goals
 
-- **G1 — Enable a decision.** The team leaves its operating-model discussion with agreed starting choices, or clearly owned next steps, for ownership, intake, prioritisation, delivery model, value measurement and knowledge management.
-- **G2 — Make the model tangible.** A clickable prototype walks through one complete engagement from request to work story in under 10 minutes.
-- **G3 — Make simplification measurable.** A proposed **Simplification Index** definition (steps, hand-offs, cycle time, errors/rework, time per run) that the team can review, shown in the prototype with a worked example.
-- **G4 — Put the measurement framework into practice.** Scorecard, four evidence levels and proportionate measurement by route are all shown as concrete forms and views, not only slides.
-- **G5 — Reduce risk before building.** Collect team feedback on the prototype to decide whether, and what, to build as a production solution.
+1. **Mostrar en vivo** la detección de intención: una frase natural en Copilot abre el formulario correcto, con datos precargados, en menos de 10 segundos.
+2. **Mostrar el ciclo completo** dentro de Copilot sin salir de la conversación: responder → guardar en SharePoint → confirmar → consultar el consolidado.
+3. **Rediseñar el formulario** para que se responda en **≤ 30 segundos** y no tenga datos ambiguos (problemas A–H).
+4. **Visualizar el desempeño consolidado** de un técnico por dimensión, con círculos que se rellenan del 1 al 5, con su tendencia en el tiempo y con un mínimo de respuestas para que el dato sea confiable.
+5. **Enseñar cómo se construyó**: estructura del proyecto, manifiestos, tools, instrucciones del agente y Workbench, todo explicado en la sesión.
+6. **Publicar un repositorio reproducible**: alguien externo debe poder clonarlo, aprovisionar las listas con los datos de ejemplo y desplegar en su tenant en **≤ 30 minutos** siguiendo el README.
 
 ## Target Users / Roles
 
-**Audience of this project:** Jane Kerrigan and the whole Future of Work team, as input to the operating-model discussion.
-
-**Roles shown in the prototype:**
-
-| Role | Needs demonstrated |
-|------|--------------------|
-| **Consultancy Lead** | Portfolio and backlog view, prioritisation decisions, value reporting for leadership |
-| **Consultant / Trainer / Coach** | Managing an engagement through the 4 steps, recording baseline and evidence, writing work stories, reusing assets |
-| **Requester** (employee, team lead, business-unit manager) | Simple request submission and visible status |
-| **Benefit Owner** (business stakeholder) | Confirming baseline and outcome on the scorecard |
-| **Participant** (attendee, coachee) | Short pulse and confidence survey |
-| **Leadership / Sponsor** | Quarterly and annual value view with credible contribution statements |
+| Rol | En la demo | Necesita |
+|---|---|---|
+| **Solicitante** (empleado que abrió el ticket) | Responde la encuesta desde Copilot | Contexto precargado, pocas preguntas, confirmación clara |
+| **Supervisor de soporte** | Consulta el desempeño de un técnico | Visión por dimensión, tendencia, comentarios relevantes |
+| **Técnico de soporte** (persona evaluada) | Aparece en los datos. Puede ver su tablero y el de sus compañeros | Retroalimentación justa, con suficientes datos y sin exponer a quien respondió |
+| **Presentador** (autor) | Ejecuta la demo y explica el código | Guion confiable, datos que cuenten una historia, plan B si falla la preview |
+| **Asistente / desarrollador de la comunidad** | Descarga el repo | README claro, scripts de aprovisionamiento, datos de ejemplo, sin dependencias de un tenant concreto |
 
 ## Scope — In
 
-**A. Operating Model Discussion Pack.** For each question, the pack gives the options, trade-offs and a suggested starting point.
-1. **Ownership & team organisation.** Service ownership by domain vs by route. Who is accountable. Who has a say in decisions.
-2. **Access & intake.** Single front door vs several channels. Triage rules. Service catalogue.
-3. **Prioritisation.** Criteria (value, reach, effort, strategic fit, AI opportunity), cadence, and who decides.
-4. **Delivery model.** Central vs embedded vs delivered through other teams or partners.
-5. **Learning & value.** How the four evidence levels, proportionate measurement and reporting cadence work in practice.
-6. **Knowledge management.** Asset library, lessons learned, reuse.
-7. **Positioning options.** AI front door, and name vs slogan, presented as decisions for the team.
-8. A **discussion guide** built around the deck's prompt: "What would make this workable in practice — and what could get in the way?"
-
-**B. Clickable Microsoft 365 prototype (illustrative data only)**
-1. **Service catalogue.** Domains × routes, with measurement depth per route.
-2. **Intake.** A Microsoft Forms request form feeding a SharePoint "Requests" list, with triage fields and a status.
-3. **Prioritisation board.** A scored and ranked backlog view.
-4. **Engagement tracker.** The 4-step lifecycle with an output for each step.
-5. **Engagement scorecard.** Challenge, baseline, target behaviour, measures and benefit owner. Worked example: the deck's monthly reporting process (6 h → 45 min; 9 → 3 manual steps).
-6. **Evidence capture.** Reach, Capability, Behaviour and Outcome, plus a pulse survey form.
-7. **Simplification Index.** Calculated before/after comparison and annualised time released.
-8. **Value dashboard.** Monthly, quarterly and annual views in Power BI (or SharePoint list views as a fallback).
-9. **Work-story template and asset library.** A small sample of each.
-10. **Guided demo script** for walking the team through the prototype.
+1. **Solución SPFx 1.24 con dos Copilot UX components** y un agente declarativo ("Asistente de Satisfacción de Soporte"):
+   - **Encuesta** (`SatisfactionSurvey`): modo inline. Formulario rediseñado y guardado en una lista de SharePoint.
+   - **Tablero del técnico** (`TechnicianScorecard`): resumen inline con opción de pasar a pantalla completa para ver el detalle.
+2. **Instrucciones del agente y frases de inicio (conversation starters)** en español, con disparadores como: "calificar la atención", "encuesta de satisfacción", "cómo me atendieron", "evaluar al técnico", "cómo va el desempeño de…".
+3. **Modelo de datos en SharePoint: una sola lista `Encuestas`**. No hay lista de tickets: el ticket se guarda como texto en el campo **`Ticket #`**. Columnas: `Ticket #` (texto), `Técnico` (persona), `Resuelto` (Sí/Parcialmente/No), `Comprensión`, `Rapidez`, `Habilidad`, `Comunicación` (número 1–5), `Recomendaría` (Sí/No/No estoy seguro), `Comentarios` (texto multilínea). El solicitante y la fecha se toman de los campos del sistema `Creado por` y `Creado`. Incluye un **script de aprovisionamiento** y **datos de ejemplo ficticios**: unos 6 técnicos y unas 120 respuestas a lo largo de 6 meses, con patrones que cuenten una historia. Por ejemplo, un técnico que comunica muy bien pero responde lento, otro que mejora con el tiempo, otro con pocas respuestas.
+4. **Localización** es-ES (principal) y en-US con los archivos `loc` de SPFx, para que el repo sirva a más gente.
+5. **Repositorio público**: README (en inglés y español), guía de despliegue, licencia MIT, capturas, guion de la demo y una lista de verificación previa al evento.
+6. **Guion de la demo** (`docs/demo-script.md`): pasos, frases exactas para Copilot, tiempos y **plan B** (video grabado y capturas).
 
 ## Scope — Out / Non-goals
 
-- A production-ready build, real user data, data migration or rollout. Production is a separate decision after feedback (G5).
-- Deciding the team's name, structure or ownership. The pack presents options; the team decides.
-- Integrations with HR, LMS, ITSM or finance systems.
-- Collecting real M365 usage or analytics data (Viva Insights, calendar analytics, etc.). Only simulated data.
-- Individual performance measurement or monitoring.
-- Building AI products. The AI front door is discussed as an option only.
-- Creating training, coaching or consultancy content.
+- Integración con un sistema de tickets real (ServiceNow, Jira, Zendesk). Tampoco hay una lista de tickets en SharePoint: el ticket es solo el texto del campo `Ticket #`.
+- Envío automático de la encuesta al cerrar un ticket (Power Automate o correo). Se puede mencionar como siguiente paso.
+- Publicación en el marketplace o AppSource (no está soportado durante la preview).
+- Reutilizar el componente como web part de SharePoint o pestaña de Teams. Es la dirección del modelo, pero en la preview solo se muestra en Copilot. Queda como extra si la GA llega a tiempo.
+- Análisis de sentimiento con IA propia o un modelo externo. Copilot puede resumir comentarios con sus propias capacidades, sin infraestructura adicional.
+- Funciones de producción: auditoría, retención, anonimización formal o soporte multi-tenant.
 
 ## Functional Requirements Summary
 
-**Epic A — Discussion Pack**
-- RF-01 One options card per organisational question: options, pros/cons, dependencies, suggested starting point, decision owner.
-- RF-02 Discussion guide and decision log template for recording team agreements and next steps.
-- RF-03 One-page glossary: domains, routes, the 4-step lifecycle, evidence levels, Simplification Index.
+**Épica 1 — Agente declarativo e intención**
+- RF-01: El agente reconoce la intención de **responder una encuesta o calificar una atención** e invoca `open_satisfaction_survey`.
+- RF-02: El agente reconoce la intención de **consultar el desempeño** de un técnico e invoca `show_technician_scorecard`.
+- RF-03: Si falta un dato (qué ticket, qué técnico), el agente pregunta o el componente muestra un selector. Nunca inventa datos.
+- RF-04: Frases de inicio visibles: "Calificar mi último ticket", "¿Cómo va el desempeño de un técnico?".
 
-**Epic B — Intake & Prioritisation (prototype)**
-- RF-04 Request form: challenge, team or unit, desired outcome, urgency. Writes to the Requests list.
-- RF-05 Triage fields: domain, route, size, status (New → Triaged → Prioritised → In delivery → Closed).
-- RF-06 Priority score calculated from configurable criteria. Ranked board view.
-- RF-07 Optional Power Automate flow: confirmation to the requester and a triage notification to the team.
+**Épica 2 — Encuesta (`SatisfactionSurvey`)**
+- RF-05: Parámetros de la tool: `ticketNumber?` y `technician?` (nombre o correo). Copilot los extrae de la conversación (p. ej. "quiero calificar el ticket 4521 que atendió Ana López") y llegan precargados pero editables. Si faltan, el formulario pide el `Ticket #` (texto) y el técnico (selector de personas del directorio).
+- RF-06: Preguntas: resultado (Sí/Parcialmente/No), 4 dimensiones con escala 1–5 etiquetada y sin valor por defecto, recomendación (Sí/No/No estoy seguro) y comentario condicional (problemas B–F).
+- RF-07: Validación: las 4 calificaciones y el resultado son obligatorios. El comentario es obligatorio solo si hay No o Parcialmente, o alguna calificación ≤ 2. (Pendiente de confirmar: ¿obligatorio u opcional con insistencia?)
+- RF-08: Evita duplicados por `Ticket #` y solicitante (`Creado por`). Si ya hay respuesta, la muestra en modo lectura.
+- RF-09: Al enviar, guarda en la lista `Encuestas` con los permisos del usuario y muestra una confirmación con un resumen.
 
-**Epic C — Engagement & Scorecard (prototype)**
-- RF-08 Engagement record linked to a request. Stage = Discover / Design / Enable / Measure & Improve, with the required output for each stage.
-- RF-09 Scorecard record (baseline, target behaviour, 3–5 measures, benefit owner). The prototype indicates "not ready for Enable" until it is complete.
-- RF-10 Measurement depth derived from the route (light / standard / detailed).
+**Épica 3 — Tablero consolidado (`TechnicianScorecard`)**
+- RF-10: Parámetros: `technician` (nombre o correo, se resuelve contra el campo de persona `Técnico`) y `period` (último mes, trimestre, semestre o rango). **El periodo se calcula con la fecha de creación de la encuesta (campo de sistema `Creado`)**: se filtran las encuestas cuyo `Creado` cae dentro del rango.
+- RF-11: **Vista inline**: calificación general (promedio de las 4 dimensiones), % resuelto, % que recomienda, número de respuestas, y la dimensión **más fuerte** y la **más débil**.
+- RF-12: **Vista de pantalla completa**:
+  - (a) **Un círculo por dimensión** (4 círculos). Cada círculo tiene 5 contornos concéntricos de guía. Con calificación **1** solo se ve el contorno exterior (círculo vacío) y con **5** el círculo queda **relleno por completo**. El relleno crece desde el centro según el promedio de la dimensión. El área rellena es proporcional a `(promedio − 1) / 4`, para que el tamaño que se percibe sea fiel al número (si se usara el radio, un 3 se vería mucho más pequeño que "la mitad"). El valor numérico (p. ej. "4.3") va siempre al centro o debajo del círculo.
+  - (a.1) **Sin comparación con otros técnicos** (decisión del autor): el tablero muestra solo los resultados de la persona consultada. No hay promedio del equipo ni de todas las encuestas.
+  - (a.2) La versión inline (RF-11) muestra los 4 círculos en pequeño, sin detalle.
+  - (b) Distribución 1–5 por dimensión.
+  - (c) Tendencia mensual por dimensión, agrupada por el mes de `Creado`.
+  - (d) Resultado Sí/Parcialmente/No.
+  - (e) Comentarios recientes, destacando los de calificaciones bajas.
+- RF-13: Si hay **menos de 5 respuestas** en el periodo, se muestra "datos insuficientes" en lugar de promedios.
+- RF-14: **Todos** los usuarios pueden ver el tablero de cualquier técnico (decisión del autor). Las calificaciones se muestran agregadas y el nombre de quien respondió nunca aparece en el tablero. La lista `Encuestas` debe dar acceso de lectura a todos los usuarios de la demo.
 
-**Epic D — Evidence & Simplification (prototype)**
-- RF-11 Evidence entries tagged by level (Reach / Capability / Behaviour / Outcome) and source (survey, observation, process map, system data, stakeholder feedback).
-- RF-12 Pulse survey form (confidence, practice adopted) with illustrative responses.
-- RF-13 Before/after process profile. **Simplification Index** = weighted average % reduction across steps, hand-offs, cycle time and errors. Weights are configurable, and the definition is open for team review.
-- RF-14 Time released = (time before − time after) × annual frequency, flagged as "confirmed by benefit owner" (yes/no).
+**Épica 4 — Datos y aprovisionamiento**
+- RF-14b: Script que crea una **nueva colección de sitios de comunicación** para la demo (`New-PnPSite -Type CommunicationSite`), p. ej. `https://<tenant>.sharepoint.com/sites/encuestas`. Recibe como parámetros la URL del tenant, el alias, el título y el idioma (1034 = español). Si el sitio ya existe, no falla: solo lo reutiliza. La lista `Encuestas` se crea en ese sitio.
+- RF-15: Script idempotente que crea la lista `Encuestas` con sus columnas y carga los datos de ejemplo. Los técnicos de ejemplo deben ser usuarios que existan en el tenant, porque `Técnico` es un campo de persona. El script los recibe como parámetro, para que funcione en cualquier tenant. Para que el tablero tenga historia, el script **reescribe la fecha `Creado`** de cada respuesta de ejemplo y las reparte en los últimos 6 meses (con `Set-PnPListItem -UpdateType UpdateOverwriteVersion`, que permite fijar `Created` y `Author`; el parámetro ya se verificó en PnP.PowerShell 1.5.0). Esto solo aplica a los datos de ejemplo; las encuestas reales usan la fecha automática.
+- RF-16: Script para limpiar o reiniciar los datos de la demo entre ensayos.
 
-**Epic E — Reporting, Stories & Knowledge (prototype)**
-- RF-15 Monthly view: demand, services delivered, reach, active engagements, follow-up rate.
-- RF-16 Quarterly view: capability shifts, behaviour changes, completed benefits, examples by domain.
-- RF-17 Annual view: demand patterns, recurring friction, scalable improvements.
-- RF-18 Work-story template (five questions and a contribution statement). Two or three sample stories.
-- RF-19 Asset library with tags for domain, route and M365 capability. Lessons-learned entry at engagement close.
+**Épica 5 — Demo y repositorio**
+- RF-17: Guion con frases exactas, tiempos y plan B, para una **sesión de 60 minutos en español**. Agenda propuesta: (1) qué son los Copilot UX components y su estado actual, ~10 min; (2) demo en vivo como usuario: encuesta y tablero, ~10 min; (3) cómo se construyó: estructura del proyecto, manifiestos, tools, instrucciones del agente, Copilot Workbench y despliegue, ~20 min; (4) limitaciones de la preview y roadmap, ~5 min; (5) preguntas y enlace al repositorio, ~15 min.
+- RF-18: README reproducible, capturas y verificación automática de que no queden marcas reales en el código ni en los datos.
 
 ## Technical Stack & Constraints
 
-- **Stack:** Microsoft 365, low-code.
-  - **SharePoint Online** site with Lists: Requests, Engagements, Scorecards, Evidence, ProcessProfiles, Stories, Assets.
-  - **Microsoft Forms** for intake and pulse surveys.
-  - **Power Automate** for the optional notification and status flows.
-  - **Power BI** for the value dashboard; SharePoint views as a fallback if licensing blocks it.
-  - Surfaced as a **Teams** tab.
-  - Documents (discussion pack, templates) in Word and PowerPoint on the same site.
-- **UX:** Microsoft Fluent / M365 defaults. Simple, guided flows. Desktop and tablet in Teams. Basic readability and contrast.
-- **Constraints:**
-  - **Illustrative data only.** Every screen is clearly labelled "sample data".
-  - Built and maintained by the team without developers.
-  - Uses only licences the team already has. Power BI and premium connectors must be confirmed.
-  - No personal performance data. The privacy approach for any future real signals is noted as a production prerequisite.
-  - Measurement shown in the prototype must stay proportionate. A webinar record takes under 5 minutes to complete.
+- **SPFx 1.24** (GA si ya salió. Si no, la versión `@next` y el generador `@microsoft/generator-sharepoint@next`). Toolchain **heft**, TypeScript y **React 18** (el default en 1.24).
+- **Node.js**: la versión soportada por SPFx 1.24 (22 LTS. El soporte para 24/26 llega con RC/GA). El entorno del autor tiene Node 22.23.1.
+- **UI**: Fluent UI React v9, para que se vea como Microsoft 365 y siga el tema del host. Gráficas en SVG ligero o una librería compatible con React 18. El paquete debe ser pequeño.
+- **Datos**: lista `Encuestas` en el sitio de comunicación de la demo, accedida con `SPHttpClient` o PnPjs con los permisos del usuario (SSO). No hay backend propio. Dentro de Copilot el componente no se ejecuta en una página de ese sitio, así que **la URL del sitio debe ser configurable**: una constante de configuración de la solución o una propiedad del tenant. Se decide en el spec, pero nunca va fija en el código público.
+- **Agente**: `declarativeAgent.json` (manifiesto v1.8 al generar el proyecto con beta 5 o superior), `instruction.txt` y `ai-plugin.json`. **Subir la `version` del agente con cada cambio.**
+- **Aprovisionamiento**: **PnP.PowerShell 1.5.0** sobre PowerShell 7, decidido por el autor.
+  - Cada script carga el módulo de forma explícita (`Import-Module PnP.PowerShell -RequiredVersion 1.5.0`). En la máquina del autor también está instalado el módulo antiguo `SharePointPnPPowerShellOnline` 3.29, que define cmdlets con los mismos nombres.
+  - **Toda conexión a SharePoint usa `Connect-PnPOnline -Url <url> -UseWebLogin`**. Es un inicio de sesión con el navegador basado en cookies y no necesita registrar una aplicación en Entra ID.
+  - Consecuencias de usar `-UseWebLogin`:
+    - (a) Solo funciona en **Windows**, porque abre una ventana de navegador embebida. En el README se indica como requisito.
+    - (b) Solo da acceso a SharePoint, no a Microsoft Graph. Los cmdlets usados deben ser solo de SharePoint (`New-PnPSite`, `New-PnPList`, `Add-PnPField`, `Add-PnPListItem`, `Set-PnPListItem`).
+    - (c) Crear la colección de sitios requiere una cuenta con permiso para crear sitios en el tenant.
+  - Sin IDs de tenant ni URLs fijas en el código público: la URL del tenant (`https://bajaworks.sharepoint.com` para el autor) se pasa como parámetro o va en un archivo de configuración local excluido de Git.
+- **Accesibilidad**: WCAG 2.1 AA (teclado, contraste, etiquetas en la escala).
+- **Restricciones de la preview**:
+  - Solo se muestra en Microsoft 365 Copilot y Copilot Chat. Todavía no funciona en Copilot dentro de Teams, Outlook ni Word.
+  - La sincronización del agente al catálogo puede tardar, así que hay que **desplegar con anticipación** (mínimo 24 h antes del evento).
+  - Las APIs y los esquemas pueden cambiar.
+  - Durante la preview no se necesita licencia de Copilot. El licenciamiento de la GA no está confirmado.
+- **Repositorio público**: licencia MIT, sin secretos, sin datos personales reales, sin marcas reales. Usar Contoso y personas ficticias.
+- **Ubicación del código**: el proyecto SPFx 1.24 vive en **`apps/satisfaction-survey/`**. **El autor hace el scaffolding** con el generador de SPFx. Los sprints parten de ese proyecto generado y no deben regenerarlo. Los scripts de aprovisionamiento y los datos de ejemplo pueden ir en `apps/satisfaction-survey/provisioning/` (por confirmar en el spec).
 
 ## Success Criteria
 
-- The team holds the operating-model discussion using the pack and records decisions or owners for all six organisational questions.
-- One end-to-end engagement demo runs cleanly in the prototype: request → triage → prioritised → 4 lifecycle steps → scorecard → evidence → Simplification Index → dashboard → work story.
-- Team members rate the prototype useful for understanding the model: an average of at least 4/5 in a short feedback survey.
-- The Simplification Index definition is reviewed and either accepted or revised by the team.
-- There is a clear go / no-go and scope recommendation for a production build.
+- En los ensayos, **≥ 9 de 10** frases del guion abren el componente correcto con los parámetros correctos.
+- Un asistente de prueba responde la encuesta en **≤ 30 s** sin ayuda.
+- El tablero se carga en **≤ 2 s** con los datos de ejemplo y la historia de los datos se entiende sin explicación extra.
+- Una persona externa clona el repo y despliega en su tenant en **≤ 30 min** solo con el README.
+- La verificación de marcas reales no encuentra nada (`Konica`, `Minolta`, `KMBS`, `SKNA`).
+- El plan B (video y capturas) está listo y probado antes del evento.
 
 ## Open Questions / Risks
 
-1. **Discussion timing.** When is the team's operating-model session? This sets the delivery date.
-2. **Licensing and environment.** Are Power BI, Power Automate and a SharePoint site available to the team? Who owns the environment?
-3. **Simplification Index.** Which dimensions and weights? Should it apply only to Business Process Improvement or to all domains?
-4. **Prioritisation criteria.** Which criteria matter most to the team and to leadership?
-5. **Name and positioning.** Team name vs slogan. Should the prototype brand itself "Future of Work"?
-6. **AI front door.** Is it in scope for the discussion now, or later? How does it relate to existing IT and AI governance?
-7. **Sample data.** Use anonymised real past engagements or fully fictional examples?
+**Decisiones tomadas (2026-10-24)**
+- Sesión de **1 hora**, en **español**, para **profesionales de TI y desarrolladores de SharePoint**. Se puede mostrar código con detalle. La fecha todavía no está definida.
+- Tenant de la demo: **https://bajaworks.sharepoint.com**, con una **nueva colección de sitios de comunicación** solo para la demo. El nombre y la URL del tenant **no** deben aparecer en el código público: se configuran por parámetro.
+- Aprovisionamiento con **PnP.PowerShell 1.5.0** y `Connect-PnPOnline -UseWebLogin` (requiere Windows).
+- Recomendación: **Sí / No / No estoy seguro** (sin NPS).
+- Visibilidad del tablero: **todos** los usuarios.
+- Visualización: **círculos por dimensión** que se rellenan del 1 (solo contorno) al 5 (relleno completo), sin comparación contra un promedio general (RF-12).
 
-**Risks:**
-- The prototype is mistaken for a committed solution. *Mitigation:* clear "prototype / sample data" labelling and framing.
-- Measurement feels heavy to consultants. *Mitigation:* proportionate forms, and showing how little a webinar record needs.
-- Over-claiming value. *Mitigation:* built-in contribution statement and a benefit-owner confirmation flag.
-- The discussion stalls on the name debate. *Mitigation:* treat the name as a separate positioning decision.
+- **Licencia (2026-10-24):** en Copilot real los componentes devuelven `403 copilot_license_required` con una cuenta *Copilot Chat (Basic)*. Decisión (opción C): la demo en vivo usa el **Copilot Workbench**, y en la sesión se muestra el diagnóstico con **`-developer on`** (versión del agente, herramienta Matched/Selected, argumentos, URL del MCP y el 403) como lección sobre la versión final. Si se consigue una licencia de Microsoft 365 Copilot antes del evento, la demo pasa a Copilot real.
+
+**Preguntas abiertas**
+1. **Fecha del evento.** El evento es **Microsoft 365 Live 2026** y la sesión quedó confirmada en Sessionize el 2026-10-23. Los organizadores publicarán los horarios definitivos a principios de la semana del 26 de octubre.
+2. ¿El comentario es **obligatorio** u **opcional con insistencia** cuando la calificación es baja?
+3. ¿Nombre del repositorio y del agente? ¿README principal en inglés o en español?
+4. ¿El tenant bajaworks ya tiene App Catalog, permisos de administrador y Copilot Chat habilitado?
+5. ~~Alias del sitio~~ → decidido: `/sites/encuestas`.
+
+**Riesgos**
+- **Cambios de última hora en la preview** (nombre, esquemas, comportamiento). Mitigación: fijar versiones, probar la semana del evento y tener el plan B.
+- **Retraso en la sincronización del agente** o en la propagación del CDN. Mitigación: desplegar con 24–48 h de anticipación y no redesplegar el día del evento.
+- **La intención no se detecta de forma consistente**. Mitigación: instrucciones con ejemplos, frases de inicio y un guion con frases ya probadas.
+- **Conectividad del lugar del evento**. Mitigación: video grabado y hotspot de respaldo.
+- **Privacidad percibida** al mostrar el "desempeño de una persona", sobre todo porque el tablero es visible para **todos**. Mitigación: datos ficticios, mínimo de respuestas, calificaciones agregadas, nunca mostrar quién respondió y mensaje de que se trata de una herramienta de mejora y no de castigo. En el README se recomienda restringir el acceso si alguien lo usa en un entorno real.
+- **Lectura engañosa de los círculos** si el relleno se escala por radio en lugar de por área. Mitigación: escalar por área (RF-12) y mostrar siempre el número.
+- **Licenciamiento en la GA**: puede cambiar lo que la audiencia necesita para probarlo. Hay que mencionarlo en la sesión.
 
 ## Input Sources
 
-- refdocs:
-  - `refdocs/janecontext.md` (team meeting notes: Future of Work initiative, value, methodology, open organisational questions, naming discussion)
-  - `refdocs/Future_of_Work_Consultancy_Operating_Model 1.pptx` (18 slides: positioning, domains, service routes, methodology, operating-model questions, measurement principles, four-level value framework, domain measures, measurement by route, engagement scorecard, reporting)
-- clarifications: `planning/clarifications/brief.json` (scope: discussion pack + prototype; stack: M365 low-code; methodology: 4-step; audience: whole team)
-- source-code: n/a (reverse engineering = no)
+- refdocs: `refdocs/narrative.md`, `refdocs/formexample.png` (analizada visualmente), `refdocs/project-constraints.md`, `refdocs/README.md`
+- clarifications: `planning/clarifications/brief.json`
+- externas (verificadas 2026-10-24): Microsoft Learn *Overview of Copilot UX components*; Microsoft 365 Developer Blog (anuncio de la preview, 2026-07-09; renombre y roadmap, 2026-09-30); muestras `github.com/pnp/spfx-copilot-apps`
+- source-code: no aplica (reverse engineering = no)

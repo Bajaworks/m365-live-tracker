@@ -8,6 +8,7 @@ coverage/
 .local-ai/
 .DS_Store
 Thumbs.db
+tmp/
 
 # Upstream clones (regenerables via update_spec_kit / update_agency_agents)
 spec-kit/upstream/
@@ -21,6 +22,9 @@ agency-agents/upstream/
 .windsurf/
 .github/copilot-instructions.md
 
-# Project-specific reference docs (keep only the README)
+# Project-specific reference docs (keep only the README and GA plan/articles)
 refdocs/*
 !refdocs/README.md
+!refdocs/spfx-1.24-ga-upgrade-plan.md
+!refdocs/articles/
+!refdocs/articles/**

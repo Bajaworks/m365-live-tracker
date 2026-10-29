@@ -1,0 +1,9 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.4/schema.json",
+  "schema_version": "v2.4",
+  "namespace": "satisfactionSurveyForm",
+  "name_for_human": "Encuestas Soporte",
+  "description_for_human": "Califica la atención de un ticket de soporte y consulta el desempeño de los técnicos.",
+  "description_for_model": "Muestra componentes interactivos de SharePoint para encuestas de satisfacción de soporte técnico, con llamadas autenticadas del lado del cliente a SharePoint. Hay dos herramientas. OpenSatisfactionSurvey abre el formulario de la encuesta de un ticket (Resultado, Comprensión, Rapidez, Habilidad, Comunicación, Recomendación, Comentario); úsala cuando el usuario quiera calificar, evaluar u opinar sobre una atención de soporte, y pasa ticketNumber y technician solo si el usuario los mencionó. ShowTechnicianScorecard muestra el desempeño consolidado de un técnico por dimensión, con tendencia y comentarios; úsala cuando el usuario pregunte por el desempeño, las calificaciones o la satisfacción de un técnico, y pasa technician y opcionalmente period (month, quarter, semester, all).",
+  "contact_email": "publisher@contoso.com"
+}
