@@ -1,6 +1,7 @@
 # m365-live-tracker — Level Up Habit Tracker 🚀
 
 [![Repository](https://img.shields.io/badge/GitHub-Bajaworks%2Fm365--live--tracker-blue?logo=github)](https://github.com/Bajaworks/m365-live-tracker)
+[![GitHub Pages](https://img.shields.io/badge/Demo-GitHub%20Pages-success?logo=github)](https://bajaworks.github.io/m365-live-tracker/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Web%20SPA%20%7C%20PWA-cyan)](#)
 [![Design](https://img.shields.io/badge/UI-Dark%20Glassmorphism-purple)](#)
@@ -15,14 +16,13 @@ Aplicación web moderna y dinámica orientada a jóvenes, estudiantes, creadores
 
 ## 🎯 Demostración en Vivo y Acceso Rápido
 
-El servidor HTTP local integrado se encuentra configurado para servir la aplicación en:
-
+- 🌐 **Online (GitHub Pages):** [https://bajaworks.github.io/m365-live-tracker/](https://bajaworks.github.io/m365-live-tracker/)
+- 💻 **Servidor Local Integrado:**
 ```bash
 # Iniciar el servidor web local integrado
 node apps/habit-tracker/serve.js
 ```
-
-👉 **URL de la aplicación:** [http://localhost:5173](http://localhost:5173) (o `http://127.0.0.1:5173`)
+Abre en tu navegador: [http://localhost:5173](http://localhost:5173) (o `http://127.0.0.1:5173`)
 
 > [!TIP]
 > Al ingresar por primera vez, la aplicación auto-inyecta un catálogo de **6 hábitos semilla vivos** con historial de días recientes para que puedas interactuar de inmediato con el dashboard, los filtros y las insignias desbloqueadas.
