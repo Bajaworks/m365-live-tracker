@@ -1,7 +1,8 @@
 # m365-live-tracker — Level Up Habit Tracker 🚀
 
 [![Repository](https://img.shields.io/badge/GitHub-Bajaworks%2Fm365--live--tracker-blue?logo=github)](https://github.com/Bajaworks/m365-live-tracker)
-[![GitHub Pages](https://img.shields.io/badge/Demo-GitHub%20Pages-success?logo=github)](https://bajaworks.github.io/m365-live-tracker/)
+[![GitHub Pages Production](https://img.shields.io/badge/Production-GitHub%20Pages-success?logo=github)](https://bajaworks.github.io/m365-live-tracker/)
+[![CI/CD Pipeline](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-orange?logo=githubactions)](https://github.com/Bajaworks/m365-live-tracker/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Web%20SPA%20%7C%20PWA-cyan)](#)
 [![Design](https://img.shields.io/badge/UI-Dark%20Glassmorphism-purple)](#)
@@ -14,22 +15,42 @@ Aplicación web moderna y dinámica orientada a jóvenes, estudiantes, creadores
 
 ---
 
-## 🎯 Demostración en Vivo y Acceso Rápido
+## 🌐 Despliegue en Producción (GitHub Pages)
 
-- 🌐 **Online (GitHub Pages):** [https://bajaworks.github.io/m365-live-tracker/](https://bajaworks.github.io/m365-live-tracker/)
-- 💻 **Servidor Local Integrado:**
-```bash
-# Iniciar el servidor web local integrado
-node apps/habit-tracker/serve.js
-```
-Abre en tu navegador: [http://localhost:5173](http://localhost:5173) (o `http://127.0.0.1:5173`)
+La aplicación se encuentra lista y configurada para producción con alta disponibilidad a través de la infraestructura global de **GitHub Pages**:
 
-> [!TIP]
-> Al ingresar por primera vez, la aplicación auto-inyecta un catálogo de **6 hábitos semilla vivos** con historial de días recientes para que puedas interactuar de inmediato con el dashboard, los filtros y las insignias desbloqueadas.
+| Entorno | URL de Acceso | Estrategia de Entrega |
+|---|---|---|
+| **Producción (Live)** | 🔗 **[https://bajaworks.github.io/m365-live-tracker/](https://bajaworks.github.io/m365-live-tracker/)** | GitHub Actions CDN Edge |
+| **Entorno Local** | 🔗 **[http://localhost:5173](http://localhost:5173)** | Servidor Node.js integrado (`serve.js`) |
+
+### Arquitectura de Producción
+- **Zero-Backend / Serverless:** Sin costos de servidores, bases de datos o mantenimiento en la nube.
+- **CDN Global:** Entrega ultra-rápida de activos con compresión y caché perimetral en la red de GitHub.
+- **Seguridad y Cifrado:** HTTPS forzado con certificados TLS automáticos.
+- **Offline-First:** Funciona de forma autónoma en el navegador; el progreso se almacena localmente de forma privada.
 
 ---
 
-## ✨ Características y Capacidades
+## ⚙️ Configuración y Activación del Despliegue CI/CD
+
+El repositorio cuenta con dos métodos de entrega listos para usar:
+
+### Método 1: GitHub Actions (Recomendado — Automatizado)
+El flujo en [.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml) se activa automáticamente en cada `push` a la rama `main` que modifique la aplicación:
+1. Dirígete a **Settings > Pages**:  
+   👉 **[https://github.com/Bajaworks/m365-live-tracker/settings/pages](https://github.com/Bajaworks/m365-live-tracker/settings/pages)**
+2. En la sección **Build and deployment > Source**, selecciona: **`GitHub Actions`**.
+3. El pipeline detectará el workflow y desplegará automáticamente la versión más reciente en cuestión de segundos.
+
+### Método 2: Rama Dedicada `gh-pages` (Sin configuración de workflow)
+Se incluye una rama independiente **`gh-pages`** construida directamente desde `apps/habit-tracker/`:
+1. En **Settings > Pages**, en **Source**, selecciona: **`Deploy from a branch`**.
+2. En **Branch**, escoge: **`gh-pages`** y carpeta **`/ (root)`**, luego pulsa **Save**.
+
+---
+
+## ✨ Características y Capacidades de la Aplicación
 
 ### 1. 📊 Dashboard Analítico y Medidor Circular Reactivo
 - **Anillo de progreso SVG animado:** Refleja en tiempo real el porcentaje de cumplimiento de las metas del día.
@@ -85,6 +106,9 @@ Abre en tu navegador: [http://localhost:5173](http://localhost:5173) (o `http://
 
 ```text
 m365-live-tracker/
+├── .github/
+│   └── workflows/
+│       └── deploy-pages.yml        # Pipeline de despliegue a GitHub Pages en producción
 ├── apps/
 │   └── habit-tracker/              # Código fuente de Level Up Habit Tracker
 │       ├── index.html              # SPA entrypoint HTML5
@@ -126,7 +150,7 @@ git clone https://github.com/Bajaworks/m365-live-tracker.git
 cd m365-live-tracker
 ```
 
-### 2. Ejecutar la aplicación
+### 2. Iniciar el servidor local
 ```bash
 node apps/habit-tracker/serve.js
 ```
@@ -136,9 +160,9 @@ Abre en tu navegador: **`http://localhost:5173`**
 
 ---
 
-## 🧪 Ejecución de Pruebas Automatizadas
+## 🧪 Pruebas Automatizadas (Pre-Deploy Checks)
 
-La suite de pruebas unitarias y de integración cubre todas las funcionalidades críticas:
+Se recomienda ejecutar las tres suites de pruebas unitarias y de integración antes de publicar cambios a producción:
 
 ```bash
 # 1. Pruebas de Persistencia, LocalStorage y Seed Data (Sprint 1)
@@ -157,4 +181,4 @@ node apps/habit-tracker/tests/sprint3.test.js
 
 Distribuido bajo la licencia **MIT**. Consulta el archivo `LICENSE` para más información.
 
-Desarrollado por **[Bajaworks](https://github.com/Bajaworks)**.
+Desarrollado y mantenido por **[Bajaworks](https://github.com/Bajaworks)**.
