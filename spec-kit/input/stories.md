@@ -1,136 +1,126 @@
 ---
-generated_by_model: 'claude-opus-5-5'
-generated_at: '2026-10-24T13:10:00Z'
-agent_roles: 'IDE Agent + product-manager + engineering-frontend-developer'
+generated_by_model: 'gemini-3.8-flash'
+generated_at: '2026-11-06T05:37:00Z'
+agent_roles: 'engineering-software-architect + engineering-frontend-developer'
 vision_command: 'generate_spec_kit'
 source_brief: 'spec-kit/input/brief.md'
-source_product_prd: 'spec-kit/input/product-prd.md'
 ---
 
-# Historias de usuario
+# User Stories — Level Up Habit Tracker
 
-Estimación en puntos: 1 = trivial, 2 = pequeño, 3 = medio, 5 = grande.
+## Tabla Índice (Stories ↔ Epics ↔ RF)
 
-## EP-01 — Datos y aprovisionamiento
+| Story | Epic | RF | Título | Owner Sugerido |
+|---|---|---|---|---|
+| **S-01** | EP-04 | RF-01 | Panel de Control y Métricas Diarias | frontend |
+| **S-02** | EP-02 | RF-02 | Gestión Integral de Hábitos (CRUD) | frontend |
+| **S-03** | EP-03 | RF-03 | Registros Diarios y Algoritmo de Rachas | frontend |
+| **S-04** | EP-05 | RF-04 | Búsqueda y Filtros Multicriterio | frontend |
+| **S-05** | EP-04 | RF-05 | Progreso Visual e Insignias de Hitos | frontend |
+| **S-06** | EP-01 | RF-06 | Persistencia en LocalStorage y Datos Seed | frontend |
+| **S-07** | EP-01 / EP-05 | RF-07 | Diseño Responsive Glassmorphism y Microcopia | frontend |
 
-### ST-01 — Configuración local y conexión (2)
-Como presentador, quiero un único archivo de configuración local y un helper de conexión, para no repetir la URL del tenant ni el método de login en cada script.
-- **CA1:** existe `provisioning/demo.config.sample.psd1` con valores de ejemplo (`contoso`). `demo.config.local.psd1` está en `.gitignore`.
-- **CA2:** `Connect-Demo.ps1` importa `PnP.PowerShell -RequiredVersion 1.5.0` y se conecta con `Connect-PnPOnline -Url <url> -UseWebLogin`.
-- **CA3:** si falta la configuración local, el error dice qué archivo copiar.
+---
 
-### ST-02 — Crear el sitio de comunicación (2) · RF-15
-Como presentador, quiero crear el sitio de la demo con un comando.
-- **CA1:** `New-DemoSite.ps1` crea `/sites/<alias>` como sitio de comunicación con el título y el LCID configurados.
-- **CA2:** si el sitio ya existe, termina sin error e indica que lo reutilizó.
-- **CA3:** al final muestra la URL del sitio.
+## Detalle de Historias de Usuario
 
-### ST-03 — Crear la lista Encuestas (3) · RF-16
-Como presentador, quiero la lista con sus columnas, vistas y permisos correctos.
-- **CA1:** los campos, tipos, opciones e índices coinciden con `data-model.md`. `Title` se muestra como "Ticket #".
-- **CA2:** la lista no hereda permisos del sitio: *Everyone except external users* tiene Contribute, con `ReadSecurity = 1` y `WriteSecurity = 2`.
-- **CA3:** si se ejecuta dos veces, no duplica nada ni falla.
-- **CA4:** existen las vistas "Todas las encuestas" y "Por técnico".
+### S-01 — Panel de Control y Métricas Diarias
+- **Como** usuario que busca superarse a diario,
+- **Quiero** ver un panel consolidado con el resumen de mis hábitos de hoy,
+- **Para** conocer inmediatamente mi nivel de cumplimiento y mantenerme motivado sin rodeos.
 
-### ST-04 — Generar y cargar los datos de ejemplo (5) · RF-17
-Como presentador, quiero unas 120 respuestas ficticias que cuenten una historia en 6 meses.
-- **CA1:** `sample-data/surveys.json` existe, es determinista y cumple los perfiles T1–T6 de `technical-spec.md` §9, con comentarios ficticios en español.
-- **CA2:** `Import-SampleData.ps1` relaciona T1…Tn con los correos configurados y crea los elementos con `m365live_IsSample = Sí`.
-- **CA3:** la fecha `Created` de cada elemento queda en `hoy − daysAgo` (con `UpdateOverwriteVersion`).
-- **CA4:** con menos de 6 técnicos configurados, carga solo los perfiles disponibles y avisa.
+**Criterios de Aceptación:**
+- [ ] Mostrar un contador total de hábitos activos en el sistema.
+- [ ] Mostrar la cantidad de hábitos completados hoy vs. el total programado para el día (ej. `3 de 5 completados`).
+- [ ] Renderizar un medidor circular o indicador visual con el porcentaje de completitud (`0%` a `100%`).
+- [ ] Mostrar el promedio de racha activa y la racha máxima registrada entre todos los hábitos.
+- [ ] Mostrar un componente de progreso de los últimos 7 días con barras o puntos indicadores de éxito diario.
+- [ ] Desplegar un microtexto motivacional que cambia según el porcentaje completado hoy (0% = inicio, 50% = impulso, 100% = día perfecto).
 
-### ST-05 — Reiniciar los datos de la demo (2) · RF-18
-- **CA1:** `Reset-DemoData.ps1 -OnlyLive` borra solo los elementos con `m365live_IsSample = No`.
-- **CA2:** `Reset-DemoData.ps1 -Reseed` borra todo y vuelve a cargar los datos de ejemplo.
-- **CA3:** pide confirmación, salvo que se use `-Force`.
+---
 
-### ST-06 — Configuración opcional en el tenant (1) · RF-19
-- **CA1:** `Set-DemoConfig.ps1` guarda la storage entity `SatisfactionSurveySite` (conectándose al App Catalog).
-- **CA2:** el README explica que este paso es opcional si se usa el alias predeterminado.
+### S-02 — Gestión Integral de Hábitos (CRUD)
+- **Como** creador de rutinas personales,
+- **Quiero** crear, editar y eliminar hábitos fácilmente con datos personalizados,
+- **Para** adaptar la aplicación a mis objetivos cambiantes de vida y estudio.
 
-## EP-02 — Fundaciones compartidas
+**Criterios de Aceptación:**
+- [ ] Botón destacado "+ Nuevo Hábito" que abre un modal con estética glassmorphism.
+- [ ] Formulario con validación en tiempo real para: Nombre (obligatorio, 3-60 caracteres), Categoría (selector obligatorio), Frecuencia (diaria, entre semana, fines de semana), Color temático e Ícono.
+- [ ] Guardar el nuevo hábito generando un ID único y timestamp `createdAt`.
+- [ ] Opción para editar el nombre, categoría, frecuencia, color y descripción de un hábito existente sin alterar su historial de rachas.
+- [ ] Opción de eliminar un hábito con confirmación previa para evitar pérdida accidental de datos.
 
-### ST-07 — Modelo, configuración y resolución del sitio (2) · RF-19
-- **CA1:** `shared/model/survey.ts` y `shared/config/settings.ts` coinciden con `data-model.md`.
-- **CA2:** `SiteResolver` usa la storage entity si existe y, si no, `origin + DEFAULT_SITE_PATH`. Tiene pruebas unitarias con respuestas simuladas.
+---
 
-### ST-08 — Repositorio de datos (3)
-- **CA1:** `SurveyRepository` implementa `getCurrentUser`, `findExisting(ticket)`, `create(draft)`, `getByTechnician(email, period)` y `listTechnicians()` según `api-spec.yaml`.
-- **CA2:** `create` resuelve el técnico con `ensureuser` y hace `POST items` con `m365live_TechnicianId` (plan B: `AddValidateUpdateItemUsingPath`). Ante un error, lanza un mensaje legible. El repositorio recibe un puerto HTTP (`IHttpPort`), así que se puede probar sin SPFx.
-- **CA3:** convierte los elementos de la lista a `ISurveyRecord` (con pruebas).
+### S-03 — Registros Diarios y Algoritmo de Rachas
+- **Como** usuario constante,
+- **Quiero** marcar mis hábitos como completados hoy con un solo toque y ver mis rachas crecer,
+- **Para** sentir satisfacción inmediata y proteger mi disciplina diaria.
 
-### ST-09 — Lógica pura con pruebas (3)
-- **CA1:** `validation`, `period`, `aggregation` y `scoreGeometry` tienen pruebas unitarias que pasan con `heft test`.
-- **CA2:** cubren: la regla del comentario, `n < 5`, empates en la dimensión más fuerte o débil, la agrupación mensual, `fillRadius(1) = 0` y `fillRadius(5) = R`.
+**Criterios de Aceptación:**
+- [ ] Cada tarjeta de hábito cuenta con un botón de check-in visualmente gratificante (círculo interactivo con animación al pulsar).
+- [ ] Al marcar un hábito hoy, la fecha en formato ISO `YYYY-MM-DD` se añade a `completedDates`.
+- [ ] Si el usuario vuelve a presionar el botón de check-in completado, se revierte el estado (toggle) para corregir errores.
+- [ ] El algoritmo de racha evalúa la continuidad:
+  - Si el hábito fue completado hoy y ayer (o días contiguos previos), la racha actual se incrementa.
+  - Si el hábito no se completó ayer pero hoy sí, la racha se reinicia a 1.
+  - Si no está completado hoy pero sí ayer, la racha previa se conserva hasta el final del día sin romperse prematuramente.
+- [ ] Si `currentStreak > longestStreak`, se actualiza automáticamente `longestStreak`.
 
-### ST-10 — Controles de UI reutilizables (3)
-- **CA1:** `RatingScale` (radiogroup accesible, sin valor inicial, etiquetas por punto), `ChoiceGroup` (botones segmentados) y `PersonField` (búsqueda y foto).
-- **CA2:** `ScoreCircle` dibuja el relleno por área, los contornos guía 2–4, el valor y su `aria-label`.
-- **CA3:** funcionan en tema claro y oscuro.
+---
 
-## EP-03 — Encuesta en Copilot
+### S-04 — Búsqueda y Filtros Multicriterio
+- **Como** usuario con múltiples hábitos organizados,
+- **Quiero** buscar por texto y filtrar por categoría o estado,
+- **Para** enfocarme rápidamente en los hábitos pendientes o en un área específica de mi vida.
 
-### ST-11 — Parámetros y manifiesto de la encuesta (1) · RF-05
-- **CA1:** el schema de zod tiene `ticketNumber?` y `technician?` con descripciones. La tool se llama `OpenSatisfactionSurvey` y su descripción incluye palabras clave en español e inglés. Su único modo es `inline`.
+**Criterios de Aceptación:**
+- [ ] Campo de búsqueda con icono que filtra instantáneamente por nombre o descripción sin requerir presionar Enter.
+- [ ] Píldoras de categoría (Estudio, Fitness, Salud, Productividad, Creación de Contenido, Mentalidad) que filtran la lista con un clic.
+- [ ] Filtro rápido por estado: "Todos", "Pendientes", "Completados", "En Racha".
+- [ ] Los filtros se combinan lógicamente (búsqueda AND categoría AND estado).
+- [ ] Si ningún hábito coincide con los filtros, se muestra un estado vacío amigable con botón para limpiar filtros.
 
-### ST-12 — Formulario rediseñado (5) · RF-06, RF-07
-Como solicitante, quiero calificar la atención en menos de 30 segundos.
-- **CA1:** se reemplaza la interfaz de ejemplo. Los bloques son Contexto → Resultado → Calificación (4) → Recomendación → Comentario.
-- **CA2:** los parámetros recibidos se precargan y se pueden editar. Si el técnico viene como nombre, se resuelve con `PersonField`.
-- **CA3:** el comentario se vuelve obligatorio, con su pregunta específica, según la regla.
-- **CA4:** "Enviar" está deshabilitado hasta que todo sea válido, y los errores se muestran junto a cada campo.
-- **CA5:** textos en es-ES y en-US.
+---
 
-### ST-13 — Envío, duplicados y seguimiento (3) · RF-08, RF-09
-- **CA1:** si ya existe una respuesta del usuario para ese Ticket #, se muestra en modo lectura.
-- **CA2:** al enviar se crea el elemento y aparece una confirmación con un resumen.
-- **CA3:** el botón "Ver desempeño de {técnico}" llama a `sendFollowUpMessageAsync` con "¿Cómo va el desempeño de {técnico}?".
-- **CA4:** los errores de red o de permisos muestran un mensaje claro y la opción de reintentar.
+### S-05 — Progreso Visual e Insignias de Hitos
+- **Como** usuario que disfruta la gamificación,
+- **Quiero** desbloquear insignias visuales cuando acumulo rachas significativas,
+- **Para** sentir orgullo por mi constancia y celebrar mis logros.
 
-## EP-04 — Tablero del técnico
+**Criterios de Aceptación:**
+- [ ] Galería de 5 insignias representativas:
+  - 🌟 *Primer Paso:* 1 día completado.
+  - 🔥 *En Llamas:* 3 días consecutivos.
+  - ⚡ *Imparable:* 7 días consecutivos.
+  - 🏆 *Hábito de Hierro:* 21 días consecutivos.
+  - 👑 *Maestría Total:* 30 días consecutivos.
+- [ ] Las insignias no obtenidas se muestran en estado bloqueado (escala de grises, opacidad reducida).
+- [ ] Al alcanzar un hito por primera vez, la insignia se desbloquea con un efecto visual brillante y guarda su fecha de desbloqueo.
 
-### ST-14 — Agregar el componente TechnicianScorecard (1) · *lo hace el autor*
-- **CA1:** el autor ejecuta `yo @microsoft/sharepoint` en `apps/satisfaction-survey`: Copilot Component, nombre `technician-scorecard`, plantilla React.
-- **CA2:** `config/copilot-agent.json` incluye los dos IDs de componente en el mismo agente.
+---
 
-### ST-15 — Parámetros, identificación del técnico y carga de datos (3) · RF-10
-- **CA1:** el schema de zod tiene `technician` y `period?` (predeterminado `quarter`). La tool se llama `ShowTechnicianScorecard` y sus modos son `inline` y `fullscreen`.
-- **CA2:** el técnico se identifica según `technical-spec.md` §5.2. Si no se encuentra, se muestran sugerencias; si hay ambigüedad, un selector.
+### S-06 — Persistencia en LocalStorage y Datos Seed Iniciales
+- **Como** usuario nuevo o recurrente,
+- **Quiero** que mis datos se guarden de forma automática y que la app tenga hábitos de ejemplo al entrar por primera vez,
+- **Para** entender el valor del producto de inmediato y nunca perder mi progreso al cerrar la pestaña.
 
-### ST-16 — Vista inline (3) · RF-11, RF-13
-- **CA1:** muestra la calificación general, n, los 4 círculos pequeños, % resuelto, % que recomienda, la dimensión más fuerte y la más débil.
-- **CA2:** con `n < 5` muestra "Datos insuficientes (n = X)".
-- **CA3:** "Ver detalle" llama a `requestDisplayModeAsync('fullscreen')`.
+**Criterios de Aceptación:**
+- [ ] Toda mutación de estado se serializa sincrónicamente en `localStorage` bajo `levelup_habits_v1`.
+- [ ] Si `localStorage` está vacío al cargar la aplicación, se cargan 5 hábitos semilla preconfigurados con historial de días recientes.
+- [ ] Al recargar la página, cerrar el navegador o reabrir la app, el 100% de los hábitos y fechas completadas se restablecen con exactitud.
+- [ ] Existe un botón discreto en la configuración/header para "Restablecer datos de prueba", permitiendo reiniciar la demo en cualquier momento.
 
-### ST-17 — Vista de pantalla completa (5) · RF-12, RF-14
-- **CA1:** 4 círculos grandes, distribución 1–5, tendencia mensual, resultado y comentarios recientes, con los de calificaciones bajas destacados.
-- **CA2:** el selector de periodo vuelve a calcular todo sin volver a llamar a la tool.
-- **CA3:** no aparece ningún dato del solicitante.
-- **CA4:** se adapta cuando el host vuelve a inline (`onHostContextChanged`).
+---
 
-## EP-05 — Agente declarativo e intención
+### S-07 — Diseño Responsive Glassmorphism y Microcopia
+- **Como** usuario que accede desde mi teléfono móvil y desde mi computadora,
+- **Quiero** una interfaz moderna de tema oscuro, con efectos translúcidos y textos motivadores,
+- **Para** disfrutar de una experiencia estética pulida, cómoda para la vista y adaptada a cualquier pantalla.
 
-### ST-18 — Agente, instrucciones y frases de inicio (2) · RF-01 a RF-04
-- **CA1:** `manifest.json`, `declarativeAgent.json` y `ai-plugin.json` tienen nombre y descripción en español con Contoso como desarrollador. Las frases de inicio son las de RF-04.
-- **CA2:** `instruction.txt` sigue `technical-spec.md` §3.
-- **CA3:** la `version` del agente sube en cada cambio, y esa regla está documentada en el README.
-
-### ST-19 — Ajuste de intención con la matriz de frases (2)
-- **CA1:** la matriz de `test-plan.md` §4 (≥ 15 frases) se ejecuta en Copilot sobre bajaworks, con ≥ 90 % de aciertos en las 10 frases del guion.
-- **CA2:** los ajustes a las instrucciones y descripciones quedan registrados.
-
-## EP-06 — Demo y repositorio público
-
-### ST-20 — Despliegue en bajaworks (2)
-- **CA1:** el `.sppkg` se sube, se activa y se sincroniza con **Add to Teams**. El agente aparece en Copilot Chat.
-- **CA2:** hay un checklist de "T−48 h / T−24 h / T−1 h" en `docs/deployment.md`.
-
-### ST-21 — Guion de la demo y plan B (3) · RF-20
-- **CA1:** `docs/demo-script.md` tiene la agenda de 60 minutos, las frases exactas, qué código mostrar (archivo y línea) y los tiempos.
-- **CA2:** hay video grabado y capturas de cada paso en `docs/screenshots/`.
-- **CA3:** se hicieron al menos 2 ensayos completos con el tiempo medido.
-
-### ST-22 — README, licencia y verificación de marcas (3) · RF-21
-- **CA1:** `README.md` (es) y `README.en.md` explican requisitos, aprovisionamiento, build, Workbench, despliegue y limitaciones de la preview, en ≤ 30 minutos de lectura y ejecución.
-- **CA2:** licencia MIT. `package-solution.json` y el manifiesto con Contoso como desarrollador.
-- **CA3:** `node tools/check-branding.js` termina sin errores. Se ejecuta antes de publicar.
+**Criterios de Aceptación:**
+- [ ] Estilo Glassmorphism aplicado con `backdrop-filter: blur(16px)`, bordes translúcidos luminosos y fondo oscuro profundo (`#0a0e17`).
+- [ ] Paleta cromática con acentos de neón vibrantes pero legibles (cian, violeta, esmeralda, naranja fuego).
+- [ ] Diseño adaptable: 1 columna fluida en smartphones y layout multi-panel espacioso en escritorio.
+- [ ] Microcopia inspiradora en español, sin tono corporativo ni lenguaje empresarial, adaptada al lenguaje natural de audiencias jóvenes.

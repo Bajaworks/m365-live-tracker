@@ -1,17 +1,14 @@
 ---
-generated_by_model: 'claude-opus-5-5'
-generated_at: '2026-10-24T13:40:00Z'
-agent_roles: 'IDE Agent + project-manager-senior + engineering-frontend-developer + design-ui-designer'
+generated_by_model: 'gemini-3.8-flash'
+generated_at: '2026-11-06T05:42:00Z'
+agent_roles: 'product-sprint-prioritizer + project-management-project-shepherd'
 vision_command: 'generate_sprints'
 sprint_number: 3
 source_spec_kit: 'spec-kit/input/'
 ---
 
-# Sprint 3 — Historias
+# Sprint 3 Stories
 
-Los criterios de aceptación completos están en `spec-kit/input/stories.md`.
-
-- **ST-14** — Agregar el componente TechnicianScorecard (autor)
-- **ST-15** — Parámetros, identificación del técnico y carga de datos
-- **ST-16** — Vista inline
-- **ST-17** — Vista de pantalla completa
+- **S-01**: Panel de Control y Métricas Diarias (RF-01)
+- **S-04**: Búsqueda y Filtros Multicriterio (RF-04)
+- **S-05**: Progreso Visual e Insignias de Hitos (RF-05)

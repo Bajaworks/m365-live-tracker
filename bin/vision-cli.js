@@ -3,11 +3,11 @@
 /**
  * vision-cli.js
  *
- * NPX CLI for @nexus360/vision-framework
+ * NPX CLI for m365-live-tracker
  *
  * Usage:
- *   npx @nexus360/vision-framework init [project-name]
- *   npx @nexus360/vision-framework init  # Uses current directory
+ *   npx m365-live-tracker init [project-name]
+ *   npx m365-live-tracker init  # Uses current directory
  */
 
 const fs = require('fs');
@@ -516,11 +516,11 @@ function showHelp() {
 VISION Framework CLI v${CLI_VERSION}
 
 Usage:
-  npx @nexus360/vision-framework init [project-name]
+  npx m365-live-tracker init [project-name]
 
 Examples:
-  npx @nexus360/vision-framework init my-app
-  npx @nexus360/vision-framework init    # Uses current directory name
+  npx m365-live-tracker init my-app
+  npx m365-live-tracker init    # Uses current directory name
 
 This creates a complete VISION project with:
   - All scripts and framework files

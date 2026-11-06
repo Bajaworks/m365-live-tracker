@@ -1,31 +1,66 @@
 ---
-generated_by_model: 'claude-opus-5-5'
-generated_at: '2026-10-24T13:10:00Z'
-agent_roles: 'IDE Agent + product-sprint-prioritizer + project-management-project-shepherd'
+generated_by_model: 'gemini-3.8-flash'
+generated_at: '2026-11-06T05:37:00Z'
+agent_roles: 'engineering-software-architect + engineering-frontend-developer'
 vision_command: 'generate_spec_kit'
 source_brief: 'spec-kit/input/brief.md'
-source_product_prd: 'spec-kit/input/product-prd.md'
 ---
 
-# Plan de sprints (propuesta)
+# Sprint Plan — Level Up Habit Tracker
 
-La fecha del evento todavía no está definida. Los sprints son cortos (unos 2–4 días de trabajo cada uno) y tienen un entregable que se puede demostrar. Cuando haya fecha, se fija **T−48 h** como límite para el último despliegue.
+## Estrategia de Entrega
 
-| Sprint | Objetivo | Historias | Puntos | Entregable |
-|---|---|---|---|---|
-| **S1 — Datos y fundaciones** | Tener el sitio, la lista y los datos de ejemplo en bajaworks, y la capa compartida con pruebas. Resolver los spikes R1–R5 | ST-01 a ST-09 | 23 | Lista `Encuestas` con unas 120 respuestas; `heft test` en verde; spikes documentados |
-| **S2 — Encuesta en Copilot** | Que la encuesta funcione de punta a punta en el Workbench y en Copilot | ST-10, ST-11, ST-12, ST-13, ST-18 | 14 | "Quiero calificar el ticket 4521 de Ana" → formulario → elemento creado |
-| **S3 — Tablero** | Tablero inline y en pantalla completa con los círculos | ST-14 (autor), ST-15, ST-16, ST-17 | 12 | "¿Cómo va Ana este trimestre?" → círculos → detalle |
-| **S4 — Listo para el escenario** | Ajustar la intención, desplegar, preparar el guion, el plan B y el repo público | ST-19, ST-20, ST-21, ST-22 | 10 | Ensayo completo de 60 min; repo listo para publicar |
+El plan de sprints divide la implementación de **Level Up Habit Tracker** en 3 sprints iterativos, enfocados en construir verticalmente desde la base arquitectónica y diseño visual, pasando por la lógica central de hábitos y rachas, hasta culminar con analítica avanzada, gamificación e inspección de calidad:
 
-## Criterio de "terminado" (todos los sprints)
-- `npm run build` sin errores ni advertencias nuevas de ESLint.
-- Pruebas unitarias en verde.
-- `node tools/check-branding.js` en verde (desde S1).
-- Probado en tema claro y oscuro.
-- Si cambió el agente, su `version` subió.
+```
+┌─────────────────────────┐     ┌─────────────────────────┐     ┌─────────────────────────┐
+│        Sprint 01        │ ──► │        Sprint 02        │ ──► │        Sprint 03        │
+│  Andamiaje, Sistema de  │     │   CRUD de Hábitos,      │     │  Dashboard de Progreso, │
+│ Diseño Glassmorphism y  │     │   Check-ins y Motor     │     │ Insignias, Filtros y    │
+│ Persistencia LocalStorage│    │       de Rachas         │     │     Pulido Final        │
+└─────────────────────────┘     └─────────────────────────┘     └─────────────────────────┘
+```
 
-## Ruta crítica y riesgos de calendario
-1. Los spikes R1–R3 (S1) definen si el formulario puede escribir con el campo Persona desde Copilot. Si fallan, el plan B (elegir el técnico de una lista) entra en S2 sin cambiar el alcance.
-2. La sincronización del agente al catálogo puede tardar horas, así que hay que desplegar en bajaworks por primera vez **al final de S2**, no en S4.
-3. Si la GA de SPFx 1.24 sale a mitad del plan, se actualiza en una rama, se prueba y solo después se integra.
+---
+
+## Sprint 01 — Fundación, Estilo Glassmorphism y Persistencia
+
+- **Objetivo del Sprint:** Disponer de la estructura de la aplicación SPA con su diseño base en modo oscuro glassmorphism, la capa de persistencia en `localStorage` funcionando y los datos semilla (`seedHabits`) inyectados y visibles en una lista inicial.
+- **Historias incluidas:**
+  - `S-06` — Persistencia en LocalStorage y Datos Seed Iniciales
+  - `S-07` — Diseño Responsive Glassmorphism y Microcopia (Base visual)
+- **Entregables clave:**
+  1. Setup del proyecto estático ejecutable en local.
+  2. Hoja de estilos con variables CSS de glassmorphism, degradados, fondos oscuros y tipografía Inter.
+  3. Módulo `storage.js` / `StorageService` con serialización, recuperación y seed automático.
+  4. Encabezado principal con marca y botón de reset seed.
+
+---
+
+## Sprint 02 — Gestión de Hábitos y Motor de Rachas
+
+- **Objetivo del Sprint:** Permitir la experiencia completa de interacción con hábitos: creación, edición, eliminación y el check-in diario con cálculo reactivo de rachas.
+- **Historias incluidas:**
+  - `S-02` — Gestión Integral de Hábitos (CRUD)
+  - `S-03` — Registros Diarios y Algoritmo de Rachas
+- **Entregables clave:**
+  1. Componente `HabitCard` con indicación de categoría, color, fuego de racha y botón de check-in.
+  2. Modal de creación y edición de hábitos con selector de categorías temáticas y colores.
+  3. Módulo `streakCalculator.js` con algoritmo determinístico de rachas consecutivas.
+  4. Microinteracción animada al marcar un hábito como completado hoy.
+
+---
+
+## Sprint 03 — Métricas de Dashboard, Insignias, Filtros y Experiencia Final
+
+- **Objetivo del Sprint:** Incorporar la capa de gamificación, el dashboard con métricas en tiempo real, búsqueda y filtros multicriterio, y validación exhaustiva de responsividad.
+- **Historias incluidas:**
+  - `S-01` — Panel de Control y Métricas Diarias
+  - `S-04` — Búsqueda y Filtros Multicriterio
+  - `S-05` — Progreso Visual e Insignias de Hitos
+- **Entregables clave:**
+  1. Componente `Dashboard` con medidor circular SVG reactivo y microtextos motivacionales dinámicos.
+  2. Barra de resumen de los últimos 7 días.
+  3. Buscador en tiempo real y píldoras interactivas de categoría y estado.
+  4. Galería de insignias desbloqueables por hitos de racha (1, 3, 7, 21, 30 días).
+  5. Pulido responsivo móvil y desktop listo para demostración completa.

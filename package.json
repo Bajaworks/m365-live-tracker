@@ -1,8 +1,8 @@
 {
-  "name": "@nexus360/vision-framework",
+  "name": "m365-live-tracker",
   "private": false,
   "version": "0.1.0",
-  "description": "Local-first AI-powered framework for structured software development: brief → spec → sprints → execution",
+  "description": "Level Up Habit Tracker & M365 Live Tracker Workspace",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
@@ -12,12 +12,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Nexus360-tech/vision.git"
+    "url": "https://github.com/Bajaworks/m365-live-tracker.git"
   },
   "bugs": {
-    "url": "https://github.com/Nexus360-tech/vision/issues"
+    "url": "https://github.com/Bajaworks/m365-live-tracker/issues"
   },
-  "homepage": "https://github.com/Nexus360-tech/vision#readme",
+  "homepage": "https://github.com/Bajaworks/m365-live-tracker#readme",
   "keywords": [
     "ai",
     "framework",

@@ -1,210 +1,299 @@
-# ---
-# generated_by_model: 'claude-opus-5-5'
-# generated_at: '2026-10-24T13:10:00Z'
-# agent_roles: 'IDE Agent + engineering-software-architect + engineering-frontend-developer'
-# vision_command: 'generate_spec_kit'
-# source_brief: 'spec-kit/input/brief.md'
-# source_product_prd: 'spec-kit/input/product-prd.md'
-# ---
-# Esta solución NO expone una API propia. Este documento describe:
-#  1) Los contratos de las tools de Copilot (x-copilot-tools): los parámetros que Copilot manda a cada componente.
-#  2) Los endpoints REST de SharePoint que consumen los componentes con SPHttpClient (SSO, permisos del usuario).
-openapi: 3.0.3
+---
+generated_by_model: 'gemini-3.8-flash'
+generated_at: '2026-11-06T05:37:00Z'
+agent_roles: 'engineering-software-architect + engineering-frontend-developer'
+vision_command: 'generate_spec_kit'
+source_brief: 'spec-kit/input/brief.md'
+---
+openapi: 3.1.0
 info:
-  title: Encuesta de Satisfacción en Copilot — contratos consumidos
-  version: 0.1.0
+  title: Level Up Habit Tracker — Internal Client & Storage Interface
+  version: 1.0.0
   description: >
-    Contratos de las tools de los Copilot UX components y de las llamadas REST de SharePoint usadas por
-    SatisfactionSurveyForm y TechnicianScorecard. {site} es la URL que resuelve SiteResolver (RF-19).
+    Especificación de contratos para la interfaz de servicios y almacenamiento local
+    de Level Up Habit Tracker (Client-Side Storage API & State Management).
 servers:
-  - url: https://{tenant}.sharepoint.com
-    variables:
-      tenant:
-        default: contoso
-
-x-copilot-tools:
-  OpenSatisfactionSurvey:
-    component: SatisfactionSurveyFormCopilotComponent
-    displayModes: [inline]
-    description: >
-      Abre el formulario de la encuesta de satisfacción de un ticket de soporte. Úsala cuando el usuario quiera
-      calificar, evaluar, responder una encuesta o dar su opinión sobre una atención de soporte
-      (rate, survey, feedback). Pasa ticketNumber y technician solo si el usuario los mencionó.
-    propertiesSchema:
-      $ref: '#/components/schemas/OpenSatisfactionSurveyProps'
-  ShowTechnicianScorecard:
-    component: TechnicianScorecardCopilotComponent
-    displayModes: [inline, fullscreen]
-    description: >
-      Muestra el desempeño consolidado de un técnico de soporte (Comprensión, Rapidez, Habilidad, Comunicación)
-      según las encuestas de satisfacción. Úsala cuando el usuario pregunte por el desempeño, las calificaciones
-      o la satisfacción de un técnico (performance, scorecard).
-    propertiesSchema:
-      $ref: '#/components/schemas/ShowTechnicianScorecardProps'
+  - url: client://local-storage/v1
+    description: Almacenamiento local del navegador (LocalStorage API)
 
 paths:
-  /_api/web/GetStorageEntity('SatisfactionSurveySite'):
+  /habits:
     get:
-      summary: Lee la URL del sitio de datos configurada en el tenant (opcional)
-      responses:
-        '200':
-          description: Value vacío o nulo si no está configurada
-          content:
-            application/json:
-              schema: { type: object, properties: { Value: { type: string, nullable: true } } }
-
-  /sites/{alias}/_api/web/currentuser:
-    get:
-      summary: Usuario actual en el sitio de datos (para buscar duplicados)
+      summary: Obtener todos los hábitos activos con sus estadísticas computadas
+      operationId: getHabits
       parameters:
-        - { name: alias, in: path, required: true, schema: { type: string, example: encuestas } }
-        - { name: $select, in: query, schema: { type: string, example: 'Id,Email,Title' } }
-      responses:
-        '200': { description: OK }
-
-  /sites/{alias}/_api/web/lists/getbytitle('Encuestas')/items:
-    get:
-      summary: Consulta las encuestas (duplicado por ticket y autor, o todas las de un técnico en un periodo)
-      parameters:
-        - { name: alias, in: path, required: true, schema: { type: string } }
-        - name: $select
+        - name: category
           in: query
-          schema: { type: string, example: 'Id,Title,Created,m365live_Resolved,m365live_Understanding,m365live_Speed,m365live_Skill,m365live_Communication,m365live_WouldRecommend,m365live_Comments,m365live_Technician/EMail,m365live_Technician/Title' }
-        - { name: $expand, in: query, schema: { type: string, example: m365live_Technician } }
-        - name: $filter
-          in: query
+          required: false
           schema:
             type: string
-            example: "m365live_Technician/EMail eq 'ana.lopez@contoso.com' and Created ge datetime'2026-07-24T00:00:00Z'"
-        - { name: $orderby, in: query, schema: { type: string, example: 'Created desc' } }
-        - { name: $top, in: query, schema: { type: integer, example: 5000 } }
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [all, completed, pending, streaking]
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         '200':
-          description: Elementos de la lista
+          description: Lista de hábitos recuperada exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Habit'
+    post:
+      summary: Crear un nuevo hábito
+      operationId: createHabit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateHabitDto'
+      responses:
+        '201':
+          description: Hábito creado y persistido exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Habit'
+
+  /habits/{id}:
+    put:
+      summary: Actualizar un hábito existente
+      operationId: updateHabit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateHabitDto'
+      responses:
+        '200':
+          description: Hábito actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Habit'
+    delete:
+      summary: Eliminar un hábito
+      operationId: deleteHabit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Hábito eliminado de la persistencia
+
+  /habits/{id}/toggle:
+    post:
+      summary: Alternar estado de completitud (Check-in) para una fecha (por defecto hoy)
+      operationId: toggleHabitCheckIn
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date
+                  description: Fecha en formato YYYY-MM-DD
+      responses:
+        '200':
+          description: Estado de check-in actualizado y rachas recalculadas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckInResult'
+
+  /stats/dashboard:
+    get:
+      summary: Obtener resumen consolidado para el dashboard principal
+      operationId: getDashboardStats
+      responses:
+        '200':
+          description: Estadísticas globales calculadas en tiempo real
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardStats'
+
+  /system/seed:
+    post:
+      summary: Restaurar o inicializar datos de demostración
+      operationId: resetSeedData
+      responses:
+        '200':
+          description: Datos semilla restaurados
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  value:
-                    type: array
-                    items: { $ref: '#/components/schemas/SurveyListItem' }
-    post:
-      summary: Crea una respuesta (forma principal; patrón de time-off-absence)
-      description: >
-        Cabeceras Accept y Content-Type = application/json;odata=nometadata y 'odata-version' vacío.
-        m365live_TechnicianId se obtiene antes con /_api/web/ensureuser.
-      parameters:
-        - { name: alias, in: path, required: true, schema: { type: string } }
-      requestBody:
-        required: true
-        content:
-          application/json:
-            example:
-              Title: '4521'
-              m365live_TechnicianId: 12
-              m365live_Resolved: 'Sí'
-              m365live_Understanding: 5
-              m365live_Speed: 4
-              m365live_Skill: 5
-              m365live_Communication: 4
-              m365live_WouldRecommend: 'Sí'
-              m365live_Comments: ''
-      responses:
-        '201': { description: 'Elemento creado; devuelve Id' }
-
-  /sites/{alias}/_api/web/ensureuser:
-    post:
-      summary: Asegura que el técnico exista como usuario del sitio y devuelve su Id
-      parameters:
-        - { name: alias, in: path, required: true, schema: { type: string } }
-      requestBody:
-        content:
-          application/json:
-            example: { logonName: 'ana.lopez@contoso.com' }
-      responses:
-        '200': { description: '{ Id, Title, Email }' }
-
-  /sites/{alias}/_api/web/lists/getbytitle('Encuestas')/AddValidateUpdateItemUsingPath:
-    post:
-      summary: Plan B para crear una respuesta (el campo Persona se resuelve por claims, sin ensureuser)
-      parameters:
-        - { name: alias, in: path, required: true, schema: { type: string } }
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: '#/components/schemas/AddValidateRequest' }
-            example:
-              listItemCreateInfo: { FolderPath: { DecodedUrl: '' }, UnderlyingObjectType: 0 }
-              formValues:
-                - { FieldName: Title, FieldValue: '4521' }
-                - { FieldName: m365live_Technician, FieldValue: '[{"Key":"i:0#.f|membership|ana.lopez@contoso.com"}]' }
-                - { FieldName: m365live_Resolved, FieldValue: 'Sí' }
-                - { FieldName: m365live_Understanding, FieldValue: '5' }
-                - { FieldName: m365live_Speed, FieldValue: '4' }
-                - { FieldName: m365live_Skill, FieldValue: '5' }
-                - { FieldName: m365live_Communication, FieldValue: '4' }
-                - { FieldName: m365live_WouldRecommend, FieldValue: 'Sí' }
-                - { FieldName: m365live_Comments, FieldValue: '' }
-              bNewDocumentUpdate: false
-      responses:
-        '200':
-          description: >
-            value[] con { FieldName, FieldValue, HasException, ErrorMessage }. Se considera error si
-            algún HasException es true.
-
-  /sites/{alias}/_api/SP.UI.ApplicationPages.ClientPeoplePickerWebServiceInterface.clientPeoplePickerSearchUser:
-    post:
-      summary: Busca personas para el campo Técnico
-      requestBody:
-        content:
-          application/json:
-            example:
-              queryParams: { QueryString: 'ana', MaximumEntitySuggestions: 8, AllowEmailAddresses: true, PrincipalSource: 15, PrincipalType: 1 }
-      responses:
-        '200': { description: 'value es un string JSON con un arreglo de entidades { Key, DisplayText, EntityData.Email }' }
+                  success:
+                    type: boolean
+                  habitsCount:
+                    type: integer
 
 components:
   schemas:
-    OpenSatisfactionSurveyProps:
+    Habit:
       type: object
-      additionalProperties: false
+      required:
+        - id
+        - name
+        - category
+        - frequency
+        - color
+        - icon
+        - createdAt
+        - completedDates
+        - currentStreak
+        - longestStreak
       properties:
-        ticketNumber: { type: string, maxLength: 50, description: 'Número de ticket mencionado por el usuario. Omitir si no lo mencionó.' }
-        technician: { type: string, maxLength: 120, description: 'Nombre o correo del técnico. Omitir si no lo mencionó.' }
-    ShowTechnicianScorecardProps:
-      type: object
-      additionalProperties: false
-      required: [technician]
-      properties:
-        technician: { type: string, maxLength: 120, description: 'Nombre o correo del técnico a consultar.' }
-        period:
+        id:
           type: string
-          enum: [month, quarter, semester, all]
-          default: quarter
-          description: 'month=último mes, quarter=últimos 3 meses, semester=últimos 6 meses, all=todo.'
-    SurveyListItem:
-      type: object
-      properties:
-        Id: { type: integer }
-        Title: { type: string, description: 'Ticket #' }
-        Created: { type: string, format: date-time }
-        m365live_Resolved: { type: string, enum: ['Sí', 'Parcialmente', 'No'] }
-        m365live_Understanding: { type: number, minimum: 1, maximum: 5 }
-        m365live_Speed: { type: number, minimum: 1, maximum: 5 }
-        m365live_Skill: { type: number, minimum: 1, maximum: 5 }
-        m365live_Communication: { type: number, minimum: 1, maximum: 5 }
-        m365live_WouldRecommend: { type: string, enum: ['Sí', 'No', 'No estoy seguro'] }
-        m365live_Comments: { type: string, nullable: true }
-        m365live_Technician:
-          type: object
-          properties: { EMail: { type: string }, Title: { type: string } }
-    AddValidateRequest:
-      type: object
-      properties:
-        listItemCreateInfo: { type: object }
-        formValues:
+          example: 'habit-101'
+        name:
+          type: string
+          example: 'Leer 20 minutos'
+        description:
+          type: string
+          example: 'Lectura de libros de desarrollo y ciencia ficción'
+        category:
+          type: string
+          example: 'Estudio'
+        frequency:
+          type: string
+          enum: [daily, weekdays, weekends]
+          example: 'daily'
+        color:
+          type: string
+          example: '#4facfe'
+        icon:
+          type: string
+          example: 'book-open'
+        createdAt:
+          type: string
+          format: date-time
+        completedDates:
           type: array
-          items: { type: object, properties: { FieldName: { type: string }, FieldValue: { type: string } } }
-        bNewDocumentUpdate: { type: boolean }
+          items:
+            type: string
+            format: date
+          example: ['2026-11-04', '2026-11-05']
+        currentStreak:
+          type: integer
+          example: 5
+        longestStreak:
+          type: integer
+          example: 14
+
+    CreateHabitDto:
+      type: object
+      required:
+        - name
+        - category
+        - frequency
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        frequency:
+          type: string
+          enum: [daily, weekdays, weekends]
+        color:
+          type: string
+        icon:
+          type: string
+
+    UpdateHabitDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        frequency:
+          type: string
+        color:
+          type: string
+        icon:
+          type: string
+
+    CheckInResult:
+      type: object
+      properties:
+        habitId:
+          type: string
+        completed:
+          type: boolean
+        date:
+          type: string
+          format: date
+        currentStreak:
+          type: integer
+        longestStreak:
+          type: integer
+        milestoneUnlocked:
+          type: string
+          nullable: true
+
+    DashboardStats:
+      type: object
+      properties:
+        totalHabits:
+          type: integer
+        completedToday:
+          type: integer
+        completionRate:
+          type: number
+          description: Porcentaje entre 0 y 100
+        averageStreak:
+          type: number
+        maxStreak:
+          type: integer
+        weeklyProgress:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+              completed:
+                type: integer
+              total:
+                type: integer
+              rate:
+                type: number
+        motivationalQuote:
+          type: string
+          example: '¡Imparable! Has completado el 100% de tus objetivos hoy.'

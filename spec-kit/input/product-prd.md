@@ -1,98 +1,73 @@
-# PRD de producto — Encuesta de Satisfacción en Copilot (Copilot UX components)
+# PRD de producto — Level Up Habit Tracker
 
-> PRD consolidado a partir de `spec-kit/input/brief.md`, `refdocs/*` y `planning/clarifications/brief.json`, y ajustado con lo que generó el scaffolding real en `apps/satisfaction-survey/` (SPFx 1.24.0-rc.0, plantilla React).
+> PRD consolidado a partir de `spec-kit/input/brief.md` y `refdocs/user-prompt.es.md`.
 
-## 1. Producto
+## 1. Producto y Visión
 
-Un **agente declarativo de Microsoft 365 Copilot** con dos **Copilot UX components** construidos con SPFx 1.24:
+**Level Up Habit Tracker** es una aplicación web moderna, ágil y visualmente cautivadora para el seguimiento personal de hábitos y la superación diaria. Diseñada para jóvenes, estudiantes, creadores y personas que buscan construir constancia sin la pesadez de plataformas corporativas.
 
-1. **Encuesta** (`SatisfactionSurveyForm`, ya generado por el autor): formulario de satisfacción de un ticket de soporte, dentro del chat.
-2. **Tablero** (`TechnicianScorecard`, el autor lo agrega con el generador): desempeño consolidado de un técnico en 4 dimensiones, mostrado en círculos.
+La aplicación opera 100% en el navegador (Single Page Application sin dependencias de backend), garantizando privacidad total, rapidez absoluta e inicio instantáneo con persistencia automática en `localStorage`.
 
-Los datos viven en **una lista de SharePoint `Encuestas`** dentro de una **colección de sitios de comunicación nueva**. Tanto el aprovisionamiento como los datos de ejemplo usan **PnP.PowerShell 1.5.0** con `Connect-PnPOnline -UseWebLogin`.
+## 2. Decisiones de Diseño y UX
 
-Objetivo: una demo en vivo de 1 hora en español (TI y desarrolladores de SharePoint) y un repositorio público reproducible. Todo con Contoso y datos ficticios.
-
-## 2. Decisiones de diseño
-
-| Tema | Decisión |
+| Área | Decisión |
 |---|---|
-| Dimensiones | **Comprensión · Rapidez · Habilidad · Comunicación** (1–5, cada punto con etiqueta, sin valor por defecto) |
-| Resultado | Sí / Parcialmente / No |
-| Recomendación | Sí / No / No estoy seguro |
-| Comentario | Obligatorio si Resultado ≠ Sí o alguna dimensión ≤ 2; opcional en otro caso |
-| Ticket | Texto libre `Ticket #` (sin lista de tickets) |
-| Técnico | Campo **Persona** |
-| Periodo del tablero | Por fecha de sistema **`Creado`** |
-| Visualización | Un círculo por dimensión: 1 = solo contorno, 5 = relleno total. El área es proporcional a `(valor−1)/4`. **Sin comparación con promedios de otros** |
-| Visibilidad | Todos los usuarios ven el tablero de cualquier técnico; nunca se muestra quién respondió |
-| Mínimo de datos | Menos de 5 respuestas en el periodo → "datos insuficientes" |
-| Tenant del autor | https://bajaworks.sharepoint.com (nunca va fijo en el código público) |
+| Estética visual | **Glassmorphism moderno**: fondos oscuros translúcidos, desenfoques (`backdrop-filter: blur`), bordes tenues semi-transparentes y sombras de neón suaves. |
+| Tema | Modo oscuro nativo por defecto con contrastes altos y acentos vibrantes (degradados violeta, cian y esmeralda). |
+| Tipografía | Sans-serif geométrica moderna (Inter / sistema limpio). |
+| Gamificación | Contadores de racha con íconos de fuego, medidores circulares de progreso del día e insignias desbloqueables por hitos (3, 7, 14, 21, 30 días). |
+| Microcopia | Mensajes motivacionales dinámicos basados en progreso ("¡Sigue así!", "Estás ganando impulso", "¡Imparable!"). |
+| Responsive | Diseño fluido adaptado tanto a pantallas móviles (touch-first) como a escritorio. |
+| Persistencia | `localStorage` con serialización JSON, validación de integridad y recuperación automática de fallos. |
+| Cero fricción | Sin registro, sin login, sin servicios externos; datos semilla representativos precargados para demostración inmediata. |
 
-## 3. Requisitos funcionales
+## 3. Requisitos Funcionales
 
-### RF-01 — Intención: responder encuesta
-El agente invoca la tool de encuesta cuando el usuario quiere calificar una atención o un ticket, responder una encuesta o dar su opinión sobre un soporte.
+### RF-01 — Panel de Control y Métricas Diarias
+El sistema debe proporcionar un dashboard central con visión inmediata del estado de los hábitos:
+- Contabilizar el total de hábitos activos en el sistema.
+- Mostrar la cantidad y porcentaje de hábitos completados durante el día actual.
+- Mostrar la racha activa acumulada (promedio y racha máxima alcanzada).
+- Visualizar el resumen de cumplimiento de los últimos 7 días.
+- Presentar microtextos motivacionales que cambian según el umbral de completitud del día.
 
-### RF-02 — Intención: consultar desempeño
-El agente invoca la tool del tablero cuando el usuario pregunta por el desempeño, las calificaciones o la satisfacción de un técnico.
+### RF-02 — Gestión de Hábitos (CRUD)
+El usuario debe poder gestionar sus hábitos de forma rápida e intuitiva:
+- Crear nuevos hábitos especificando: nombre, categoría, frecuencia objetivo, color/ícono temático y descripción breve.
+- Editar atributos de hábitos existentes sin perder el historial de cumplimiento acumulado.
+- Eliminar hábitos con confirmación para prevenir borrados accidentales.
+- Ofrecer categorías predefinidas: Estudio, Fitness, Salud, Productividad, Creación de Contenido, Mentalidad.
 
-### RF-03 — No inventar datos
-Si falta el ticket o el técnico, el agente no los inventa. El formulario los pide o el agente pregunta.
+### RF-03 — Registros Diarios y Algoritmo de Rachas
+El sistema debe permitir registrar el progreso diario y gestionar rachas consecutivas:
+- Marcar o desmarcar el check-in de un hábito para el día en curso con un solo clic/tap.
+- Refrescar al instante los porcentajes globales y los indicadores visuales.
+- Calcular y mantener la racha actual (`currentStreak`) y la mejor racha (`longestStreak`):
+  - Si el check-in se realizó hoy o ayer, la racha se preserva y avanza con el nuevo día.
+  - Si transcurrió más de 1 día sin check-in, la racha actual se reinicia a 1 al marcar hoy.
+- Registrar el historial de fechas (`completedDates: string[]` en formato ISO `YYYY-MM-DD`).
 
-### RF-04 — Frases de inicio
-"Calificar la atención de un ticket" y "¿Cómo va el desempeño de un técnico?".
+### RF-04 — Búsqueda y Filtros Multicriterio
+El sistema debe permitir explorar y organizar la lista de hábitos:
+- Buscador textual en tiempo real por nombre y descripción del hábito.
+- Filtro por categoría temática mediante botones/píldoras interactivas.
+- Filtro por estado operativo: Todos, Completados hoy, Pendientes hoy, Con racha activa.
+- Estado vacío amigable cuando no haya coincidencias en los filtros aplicados.
 
-### RF-05 — Parámetros de la encuesta
-`ticketNumber?` y `technician?` (nombre o correo). Si vienen, se precargan y se pueden editar.
+### RF-05 — Progreso Visual e Insignias de Hitos
+La interfaz debe recompensar el esfuerzo diario mediante elementos gráficos atractivos:
+- Indicadores circulares y barras de progreso con gradientes dinámicos según el avance.
+- Visualización de insignias de hitos desbloqueadas (p. ej. "Primer Paso" 1 día, "En Llamas" 3 días, "Imparable" 7 días, "Hábito de Hierro" 21 días).
+- Notificaciones/animaciones visuales de celebración al alcanzar un nuevo hito de racha.
 
-### RF-06 — Preguntas de la encuesta
-Contexto (Ticket #, Técnico) → Resultado → 4 dimensiones → Recomendación → Comentario condicional.
+### RF-06 — Persistencia en LocalStorage y Datos Seed Iniciales
+El sistema debe garantizar la persistencia confiable y experiencia inicial inmediata:
+- Almacenar toda la colección de hábitos y configuración en `localStorage` bajo una clave estructurada (ej. `levelup_habits_v1`).
+- Si el almacenamiento está vacío al iniciar, inicializar automáticamente datos semilla con 5 a 6 hábitos variados con historial de días recientes.
+- Botón opcional de restablecer datos semilla / reiniciar datos en configuración para pruebas y demostraciones.
 
-### RF-07 — Validación
-Resultado, las 4 dimensiones, Ticket # y Técnico son obligatorios. El comentario es obligatorio según la regla de la sección 2.
-
-### RF-08 — Sin duplicados
-Una respuesta por `Ticket #` y por solicitante (`Creado por`). Si ya existe, se muestra en modo lectura.
-
-### RF-09 — Envío y confirmación
-Se guarda en `Encuestas` con los permisos del usuario. La confirmación ofrece "Ver desempeño de <técnico>", que manda un mensaje de seguimiento al chat.
-
-### RF-10 — Parámetros del tablero
-`technician` (nombre o correo) y `period` (`month`, `quarter`, `semester` o `all`; por defecto `quarter`). El filtro se aplica sobre `Creado`.
-
-### RF-11 — Tablero inline
-Calificación general, 4 círculos pequeños, % resuelto, % que recomienda, n respuestas, la dimensión más fuerte y la más débil, y el botón "Ver detalle" (pantalla completa).
-
-### RF-12 — Tablero en pantalla completa
-4 círculos grandes con su valor, distribución 1–5 por dimensión, tendencia mensual por `Creado`, Resultado Sí/Parcialmente/No y comentarios recientes (los de calificaciones bajas destacados). Selector de periodo.
-
-### RF-13 — Datos insuficientes
-Si n < 5 en el periodo, se muestra "datos insuficientes" en lugar de valores.
-
-### RF-14 — Anonimato del solicitante
-El tablero nunca muestra `Creado por`.
-
-### RF-15 — Sitio de comunicación
-El script crea (o reutiliza) la colección de sitios de comunicación de la demo. Parámetros: URL del tenant, alias, título y LCID.
-
-### RF-16 — Lista Encuestas
-El script crea la lista, sus columnas, sus vistas y sus permisos de forma idempotente: todos pueden crear, todos pueden leer y cada quien solo edita lo suyo.
-
-### RF-17 — Datos de ejemplo
-El script carga unas 120 respuestas ficticias para N técnicos (correos recibidos como parámetro) y reparte la fecha `Creado` en 6 meses con `UpdateOverwriteVersion`.
-
-### RF-18 — Reinicio de la demo
-Un script borra los datos (todos, o solo los creados en la demo en vivo) y puede volver a cargar los de ejemplo.
-
-### RF-19 — Configuración del sitio
-Los componentes encuentran el sitio de datos en una propiedad del tenant (storage entity) o, si no existe, en la ruta por defecto `/sites/encuestas` del mismo tenant.
-
-### RF-20 — Guion de la demo
-Agenda de 60 minutos, frases exactas, ensayos y plan B.
-
-### RF-21 — Repositorio público
-README en español y en inglés, licencia MIT, capturas y una verificación automática de que no haya marcas reales ni el tenant del autor en el código.
-
-## 4. Fuera de alcance
-Sistema de tickets real, envío automático de la encuesta, AppSource, reutilización como web part o en Teams, IA propia, funciones de producción.
+### RF-07 — Diseño Responsive y Microtextos Dinámicos
+La aplicación debe verse y sentirse como un producto de alta calidad en cualquier dispositivo:
+- Estructura glassmorphism adaptable con `backdrop-filter`, paleta oscura profunda y acentos fluorescentes.
+- Controles accesibles y amigables para pantallas táctiles (botones de tamaño adecuado, áreas de toque cómodas).
+- Animaciones CSS sutiles en hover, check-ins y apertura de modales o paneles.

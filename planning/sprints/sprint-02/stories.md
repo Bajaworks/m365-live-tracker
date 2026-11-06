@@ -1,18 +1,13 @@
 ---
-generated_by_model: 'claude-opus-5-5'
-generated_at: '2026-10-24T13:40:00Z'
-agent_roles: 'IDE Agent + project-manager-senior + engineering-frontend-developer + design-ux-architect'
+generated_by_model: 'gemini-3.8-flash'
+generated_at: '2026-11-06T05:42:00Z'
+agent_roles: 'product-sprint-prioritizer + project-management-project-shepherd'
 vision_command: 'generate_sprints'
 sprint_number: 2
 source_spec_kit: 'spec-kit/input/'
 ---
 
-# Sprint 2 — Historias
+# Sprint 2 Stories
 
-Los criterios de aceptación completos están en `spec-kit/input/stories.md`.
-
-- **ST-10** — Controles de UI reutilizables
-- **ST-11** — Parámetros y manifiesto de la encuesta
-- **ST-12** — Formulario rediseñado
-- **ST-13** — Envío, duplicados y seguimiento
-- **ST-18** — Agente, instrucciones y frases de inicio
+- **S-02**: Gestión Integral de Hábitos - CRUD y Categorías (RF-02)
+- **S-03**: Registros Diarios y Algoritmo de Rachas (RF-03)

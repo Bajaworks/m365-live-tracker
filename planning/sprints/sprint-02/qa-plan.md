@@ -1,18 +1,23 @@
 ---
-generated_by_model: 'claude-opus-5-5'
-generated_at: '2026-10-24T13:40:00Z'
-agent_roles: 'IDE Agent + project-manager-senior + engineering-frontend-developer + design-ux-architect'
+generated_by_model: 'gemini-3.8-flash'
+generated_at: '2026-11-06T05:42:00Z'
+agent_roles: 'product-sprint-prioritizer + project-management-project-shepherd'
 vision_command: 'generate_sprints'
 sprint_number: 2
 source_spec_kit: 'spec-kit/input/'
 ---
 
-# Sprint 2 — Plan de QA
+# Sprint 2 QA Plan
 
-- [ ] Casos W1–W5 y W10 de `test-plan.md` §2 en el Copilot Workbench.
-- [ ] Intención I1–I5 e I11 en Copilot (bajaworks) tras la sincronización.
-- [ ] Accesibilidad del formulario con teclado y lector de pantalla (§5).
-- [ ] Un usuario sin permisos de administrador puede enviar, y no puede editar respuestas ajenas (P5).
+## Validaciones Críticas
 
-Referencia: `spec-kit/input/test-plan.md`.
-- [ ] Spikes heredados del sprint 1 (`apps/satisfaction-survey/docs/spikes.md`): **R2** (escribir el campo Persona desde Copilot con la cuenta sin permisos de administrador), **R3** (búsqueda de personas desde el host de Copilot) y **R9** (estilos de Fluent v9 en el iframe, en tema claro y oscuro).
+- [ ] TC-03: Al marcar un hábito hoy completado ayer, la racha actual se incrementa en +1.
+- [ ] TC-04: Si el último check-in fue hace 2 o más días, la racha actual se reinicia a 1 y longestStreak conserva el récord histórico.
+- [ ] TC-05: El desmarcado (toggle uncheck) revierte el estado sin corromper el historial de fechas previas.
+- [ ] TC-07 y TC-08: El modal permite crear nuevos hábitos y editar existentes sin perder sus rachas acumuladas.
+- [ ] TC-09: La eliminación remueve el hábito de la persistencia de forma consistente.
+
+## Riesgos Monitoreados
+
+- Diferencias de zonas horarias en el formato de fecha ISO local: validado usando YYYY-MM-DD local (`getFullYear`, `getMonth() + 1`, `getDate`).
+- Duplicados en `completedDates`: mitigado asegurando el uso de `Set` antes de persistir.
